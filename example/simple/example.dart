@@ -7,11 +7,17 @@ Stage stage;
 RenderLoop renderLoop;
 ResourceManager resourceManager = new ResourceManager();
 
+String text = """
+Hello World!
+Grumpy wizards make 
+toxic brew for the 
+evil Queen and Jack.""";
+
 Future main() async {
 
   var canvas = html.querySelector('#stage');
 
-  stage = new Stage(canvas, webGL: true, width:400, height: 500, color: Color.DarkSlateGray);
+  stage = new Stage(canvas, webGL: true, width: 800, height: 600, color: Color.DarkSlateGray);
   stage.scaleMode = StageScaleMode.SHOW_ALL;
   stage.align = StageAlign.NONE;
 
@@ -21,6 +27,11 @@ Future main() async {
   var fontUrl = "../common/fonts/xml/Luckiest_Guy.xml";
   var bitmapFontFormat = BitmapFontFormat.XML;
   var bitmapFont = await BitmapFont.load(fontUrl, bitmapFontFormat);
+  var bitmapText = new BitmapText(bitmapFont);
 
+  bitmapText.x = 50;
+  bitmapText.y = 50;
+  bitmapText.text = text;
+  bitmapText.addTo(stage);
 
 }

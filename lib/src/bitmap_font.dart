@@ -31,7 +31,27 @@ class BitmapFont {
 
   //-----------------------------------------------------------------------------------------------
 
+  BitmapFontChar getChar(int id) {
+    for(int i = 0; i < this.chars.length; i++) {
+      var char = this.chars[i];
+      if (char.id == id) return char;
+    }
+    return null;
+  }
 
+  BitmapFontKerning getKerning(int first, int second) {
+    for(int i = 0; i < this.kernings.length; i++) {
+      var kerning = this.kernings[i];
+      if (kerning.first == first && kerning.second == second) {
+        return kerning;
+      }
+    }
+    return null;
+  }
 
+  int getKerningAmount(int first, int second) {
+    var kerning = getKerning(first, second);
+    return kerning != null ? kerning.amount : 0;
+  }
 
 }

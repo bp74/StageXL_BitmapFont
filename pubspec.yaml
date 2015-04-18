@@ -11,4 +11,4 @@ dependencies:
   xml: any
 dependency_overrides:
   stagexl:
-    path: D:\GitHub\bp74\StageXL
+    git: https://github.com/bp74/StageXL.git

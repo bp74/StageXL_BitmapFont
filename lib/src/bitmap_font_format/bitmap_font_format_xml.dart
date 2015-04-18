@@ -54,13 +54,18 @@ class _BitmapFontFormatXml extends BitmapFontFormat {
         _getInt(commonXml, "greenChnl", 0),
         _getInt(commonXml, "blueChnl", 0));
 
-    var pages = pagesXml.findElements("page").map((pageXml) {
+    var futurePages = pagesXml.findElements("page").map((pageXml) async {
       var id = _getInt(pageXml, "id", 0);
       var file = _getString(pageXml, "file", "");
-      return new BitmapFontPage(id, file);
-    }).toList();
+      var imageUrl = _replaceFilename(url, file);
+      var bitmapData = await BitmapData.load(imageUrl);
+      return new BitmapFontPage(id, bitmapData);
+    });
+
+    var pages = await Future.wait(futurePages);
 
     var chars = charsXml.findElements("char").map((charXml) {
+
       var id = _getInt(charXml, "id", 0);
       var x = _getInt(charXml, "x", 0);
       var y = _getInt(charXml, "y", 0);
@@ -68,13 +73,20 @@ class _BitmapFontFormatXml extends BitmapFontFormat {
       var height = _getInt(charXml, "height", 0);
       var xOffset = _getInt(charXml, "xoffset", 0);
       var yOffset = _getInt(charXml, "yoffset", 0);
-      var xAdvance = _getInt(charXml, "xadvance", 0);
-      var page = _getInt(charXml, "page", 0);
+      var advance = _getInt(charXml, "xadvance", 0);
+      var pageId = _getInt(charXml, "page", 0);
       var colorChannel = _getInt(charXml, "chnl", 0);
       var letter = _getString(charXml, "letter", "");
-      return new BitmapFontChar(
-          id, x, y, width, height, xOffset, yOffset,
-          xAdvance, page, colorChannel, letter);
+
+      var renderTextureQuad = new RenderTextureQuad(
+          pages.firstWhere((p) => p.id == pageId).bitmapData.renderTexture,
+          new Rectangle<int>(x, y, width, height),
+          new Rectangle<int>(-xOffset, -yOffset, width, common.lineHeight),
+          0, 1.0);
+
+      var bitmapData = new BitmapData.fromRenderTextureQuad(renderTextureQuad);
+      return new BitmapFontChar(id, bitmapData, advance, colorChannel, letter);
+
     }).toList();
 
     var kernings = kerningsXml.findElements("kerning").map((kerningXml) {
