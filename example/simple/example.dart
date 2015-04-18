@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:html' as html;
+import 'dart:math' as math;
 import 'package:stagexl/stagexl.dart';
 import 'package:stagexl_bitmapfont/stagexl_bitmapfont.dart';
 
@@ -42,4 +43,29 @@ Future main() async {
   bitmapText.text = text;
   bitmapText.addTo(stage);
 
+  animateBitmapText(bitmapText);
 }
+
+//-----------------------------------------------------------------------------
+
+void animateBitmapText(BitmapText bitmapText) {
+
+  for(var bitmap in bitmapText.children) {
+    bitmap.pivotX = bitmap.width / 2;
+    bitmap.pivotY = bitmap.height / 2;
+    bitmap.x += bitmap.pivotX;
+    bitmap.y += bitmap.pivotY;
+  }
+
+  var transtionFunction = TransitionFunction.linear;
+  var transition = new Transition(0, 10000, 1200, transtionFunction);
+  stage.juggler.add(transition);
+
+  transition.onUpdate = (value) {
+    for(var bitmap in bitmapText.children) {
+      bitmap.rotation = 0.2 * math.sin(value + bitmap.x);
+    }
+  };
+}
+
+
