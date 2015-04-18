@@ -8,6 +8,7 @@ environment:
 dependencies:
   browser: any
   stagexl: '>=0.11.0 <0.12.0'
+  xml: any
 dependency_overrides:
   stagexl:
     path: D:\GitHub\bp74\StageXL
