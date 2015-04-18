@@ -6,10 +6,10 @@ provides support for bitmap fonts.
 Bitmap fonts can be created with different tools, 
 here is just a short list of the most popular tools available:
 
-__bmGlyph__ <http://www.bmglyph.com/screenshots> (Mac)
-__Glyph Designer__ <https://71squared.com/glyphdesigner> (Mac and Windows)
-__BMFont__ <http://www.angelcode.com/products/bmfont> (Windows)
-__Littera__ <http://kvazars.com/littera> (Online)
+__bmGlyph__ <http://www.bmglyph.com/screenshots> (Mac)  
+__Glyph Designer__ <https://71squared.com/glyphdesigner> (Mac and Windows)  
+__BMFont__ <http://www.angelcode.com/products/bmfont> (Windows)  
+__Littera__ <http://kvazars.com/littera> (Online)  
 
 ## StageXL
 
