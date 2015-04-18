@@ -14,21 +14,23 @@ class BitmapText extends DisplayObjectContainer {
   void set text(String value) {
 
     this.removeChildren();
-    _text = value.replaceAll('\r\n', '\n').replaceAll('\r', '\n');
+    _text = value;
 
     int x = 0, y = 0, lastCodeUnit = 0;
+    RegExp lineSplit = new RegExp(r"\r\n|\r|\n");
 
-    for(String line in _text.split('\n')) {
+    for(String line in value.split(lineSplit)) {
       for(int codeUnit in line.codeUnits) {
         var kerning = bitmapFont.getKerningAmount(lastCodeUnit, codeUnit);
         var bitmapFontChar = bitmapFont.getChar(codeUnit);
-        var bitmapData = bitmapFontChar.bitmapData;
-        var bitmap = new Bitmap(bitmapData);
-        bitmap.x = x + kerning;
-        bitmap.y = y;
-        bitmap.addTo(this);
-        x = x + bitmapFontChar.advance + kerning;
-        lastCodeUnit = codeUnit;
+        if (bitmapFontChar != null) {
+          var bitmap = new Bitmap(bitmapFontChar.bitmapData);
+          bitmap.x = x + kerning;
+          bitmap.y = y;
+          bitmap.addTo(this);
+          x = x + bitmapFontChar.advance + kerning;
+          lastCodeUnit = codeUnit;
+        }
       }
       lastCodeUnit = 0;
       x = 0;
