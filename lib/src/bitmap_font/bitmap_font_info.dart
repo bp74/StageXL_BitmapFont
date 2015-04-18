@@ -21,16 +21,16 @@ class BitmapFontInfo {
   final bool smooth;
 
   /// The outline thickness for the characters
-  final bool outline;
-
-  /// The name of the OEM charset used (when not unicode).
-  final String charset;
+  final int outline;
 
   /// The font height stretch in percentage. 100% means no stretch.
   final int stretchHeight;
 
   /// The supersampling level used. 1 means no supersampling was used.
   final int superSampling;
+
+  /// The name of the OEM charset used (when not unicode).
+  final String charset;
 
   /// The left padding for the character.
   final int paddingLeft;
@@ -54,8 +54,8 @@ class BitmapFontInfo {
 
   BitmapFontInfo(
       this.face, this.size,
-      this.bold, this.italic, this.unicode, this.smooth, this.outline,
-      this.charset, this.stretchHeight, this.superSampling,
+      this.bold, this.italic, this.unicode, this.smooth,
+      this.outline, this.stretchHeight, this.superSampling, this.charset,
       this.paddingLeft, this.paddingTop, this.paddingRight, this.paddingBottom,
       this.spacingHorizontal, this.spacingVertical);
 

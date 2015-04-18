@@ -48,7 +48,8 @@ class BitmapFontCommon {
   //---------------------------------------------------------------------------
 
   BitmapFontCommon(
-      this.lineHeight, this.base, this.scaleWidth, this.scaleHeight, this.pages,
+      this.lineHeight, this.base, this.scaleWidth, this.scaleHeight,
+      this.pages, this.packed,
       this.alphaChannel, this.redChannel, this.greenChannel, this.blueChannel);
 
 }
