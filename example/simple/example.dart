@@ -15,6 +15,8 @@ evil Queen and Jack.""";
 
 Future main() async {
 
+  StageXL.bitmapDataLoadOptions.webp = true;
+
   var canvas = html.querySelector('#stage');
 
   stage = new Stage(canvas, webGL: true, width: 800, height: 600, color: Color.DarkSlateGray);
