@@ -26,14 +26,14 @@ Future main() async {
   renderLoop = new RenderLoop();
   renderLoop.addStage(stage);
 
-  var fontUrl = "../common/fonts/xml/Luckiest_Guy.xml";
-  //var fontUrl = "../common/fonts/xml/Fascinate_Inline.xml";
-  //var fontUrl = "../common/fonts/xml/Orbitron.xml";
-  //var fontUrl = "../common/fonts/xml/Permanent_Marker.xml";
-  //var fontUrl = "../common/fonts/xml/Sarina.xml";
-  //var fontUrl = "../common/fonts/xml/Sigmar_One.xml";
+  var fontUrl = "../common/fonts/json/Luckiest_Guy.json";
+  //var fontUrl = "../common/fonts/json/Fascinate_Inline.json";
+  //var fontUrl = "../common/fonts/json/Orbitron.json";
+  //var fontUrl = "../common/fonts/json/Permanent_Marker.json";
+  //var fontUrl = "../common/fonts/json/Sarina.json";
+  //var fontUrl = "../common/fonts/json/Sigmar_One.json";
 
-  var bitmapFontFormat = BitmapFontFormat.XML;
+  var bitmapFontFormat = BitmapFontFormat.JSON;
   var bitmapFont = await BitmapFont.load(fontUrl, bitmapFontFormat);
   var bitmapText = new BitmapText(bitmapFont);
 

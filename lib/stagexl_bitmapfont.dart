@@ -1,6 +1,7 @@
 library stagexl_bitmapfont;
 
 import 'dart:async';
+import 'dart:convert';
 import 'dart:html' show HttpRequest;
 
 import 'package:stagexl/stagexl.dart';
