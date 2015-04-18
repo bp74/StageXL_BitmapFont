@@ -17,9 +17,9 @@ class _BitmapFontFormatXml extends BitmapFontFormat {
     var fontXml = xml.findElements("font").first;
     var infoXml = fontXml.findElements("info").first;
     var commonXml = fontXml.findElements("common").first;
-    var pagesXml = fontXml.findElements("pages").first;
-    var charsXml = fontXml.findElements("chars").first;
-    var kerningsXml = fontXml.findElements("kernings").first;
+    var pageXmls = fontXml.findAllElements("page");
+    var charXmls = fontXml.findAllElements("char");
+    var kerningXmls = fontXml.findAllElements("kerning");
 
     var infoPaddings = _getString(infoXml, "padding", "0,0,0,0").split(",");
     var infoSpacings = _getString(infoXml, "spacing", "0,0").split(",");
@@ -54,7 +54,7 @@ class _BitmapFontFormatXml extends BitmapFontFormat {
         _getInt(commonXml, "greenChnl", 0),
         _getInt(commonXml, "blueChnl", 0));
 
-    var futurePages = pagesXml.findElements("page").map((pageXml) async {
+    var futurePages = pageXmls.map((pageXml) async {
       var id = _getInt(pageXml, "id", 0);
       var file = _getString(pageXml, "file", "");
       var imageUrl = _replaceFilename(url, file);
@@ -64,7 +64,7 @@ class _BitmapFontFormatXml extends BitmapFontFormat {
 
     var pages = await Future.wait(futurePages);
 
-    var chars = charsXml.findElements("char").map((charXml) {
+    var chars = charXmls.map((charXml) {
 
       var id = _getInt(charXml, "id", 0);
       var x = _getInt(charXml, "x", 0);
@@ -89,7 +89,7 @@ class _BitmapFontFormatXml extends BitmapFontFormat {
 
     }).toList();
 
-    var kernings = kerningsXml.findElements("kerning").map((kerningXml) {
+    var kernings = kerningXmls.map((kerningXml) {
       var first = _getInt(kerningXml, "first", -1);
       var second = _getInt(kerningXml, "second", -1);
       var amount = _getInt(kerningXml, "amount", 0);

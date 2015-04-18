@@ -24,7 +24,9 @@ Future main() async {
   renderLoop = new RenderLoop();
   renderLoop.addStage(stage);
 
-  var fontUrl = "../common/fonts/xml/Luckiest_Guy.xml";
+  //var fontUrl = "../common/fonts/xml/Luckiest_Guy.xml";
+  var fontUrl = "../common/fonts/xml/Fascinate_Inline.xml";
+
   var bitmapFontFormat = BitmapFontFormat.XML;
   var bitmapFont = await BitmapFont.load(fontUrl, bitmapFontFormat);
   var bitmapText = new BitmapText(bitmapFont);
