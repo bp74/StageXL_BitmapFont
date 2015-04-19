@@ -78,11 +78,10 @@ class _BitmapFontFormatXml extends BitmapFontFormat {
       var colorChannel = _getInt(charXml, "chnl", 0);
       var letter = _getString(charXml, "letter", "");
 
-      var renderTextureQuad = new RenderTextureQuad(
-          pages.firstWhere((p) => p.id == pageId).bitmapData.renderTexture,
+      var renderTextureQuad = new RenderTextureQuad.slice(
+          pages.firstWhere((p) => p.id == pageId).bitmapData.renderTextureQuad,
           new Rectangle<int>(x, y, width, height),
-          new Rectangle<int>(-xOffset, -yOffset, width, common.lineHeight),
-          0, 1.0);
+          new Rectangle<int>(-xOffset, -yOffset, width, common.lineHeight));
 
       var bitmapData = new BitmapData.fromRenderTextureQuad(renderTextureQuad);
       return new BitmapFontChar(id, bitmapData, advance, colorChannel, letter);
