@@ -13,7 +13,7 @@ class _BitmapFontFormatFnt extends BitmapFontFormat {
     // TODO: add support for HiDpi textures
 
     var text = await HttpRequest.getString(url);
-    var argsRegExp = new RegExp(r'\s+(\w+)=((\-?\d+,?)+|"[\w\-\s._@]*")');
+    var argsRegExp = new RegExp(r'\s+(\w+)=((\-?\d+,?)+|"[\w\-\s\(\)._@]*")');
     var lineRegExp = new RegExp(r'(\w+)((' + argsRegExp.pattern + r')+)');
     var splitRegExp = new RegExp(r'\r\n|\r|\n');
 
