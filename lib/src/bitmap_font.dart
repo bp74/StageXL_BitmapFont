@@ -29,16 +29,16 @@ class BitmapFont {
               url, bitmapDataLoadOptions));
 
   static Future<BitmapFont> fromTextureAtlas(
-      TextureAtlas textureAtlas, String namePrefix, String description, [
+      TextureAtlas textureAtlas, String namePrefix, String source, [
       BitmapFontFormat bitmapFontFormat = BitmapFontFormat.FNT]) =>
           bitmapFontFormat.load(new _BitmapFontLoaderTextureAtlas(
-              textureAtlas, namePrefix, description));
+              textureAtlas, namePrefix, source));
 
   static Future<BitmapFont> fromBitmapData(
-      BitmapData bitmapData, String description, [
+      BitmapData bitmapData, String source, [
       BitmapFontFormat bitmapFontFormat = BitmapFontFormat.FNT]) =>
           bitmapFontFormat.load(new _BitmapFontLoaderBitmapData(
-              bitmapData, description));
+              bitmapData, source));
 
   static Future<BitmapFont> withLoader(
       BitmapFontLoader bitmapFontLoader, [

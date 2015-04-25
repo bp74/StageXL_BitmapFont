@@ -4,13 +4,13 @@ class _BitmapFontLoaderTextureAtlas extends BitmapFontLoader {
 
   final TextureAtlas textureAtlas;
   final String namePrefix;
-  final String description;
+  final String source;
 
-  _BitmapFontLoaderTextureAtlas(this.textureAtlas, this.namePrefix, this.description);
+  _BitmapFontLoaderTextureAtlas(this.textureAtlas, this.namePrefix, this.source);
 
   @override
-  Future<String> getDescription() {
-    return new Future.value(this.description);
+  Future<String> getSource() {
+    return new Future.value(this.source);
   }
 
   @override

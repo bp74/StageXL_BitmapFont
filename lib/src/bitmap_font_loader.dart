@@ -6,6 +6,10 @@ part of stagexl_bitmapfont;
 /// from a custom source by implementing a BitmapFontLoader class.
 
 abstract class BitmapFontLoader {
-  Future<String> getDescription();
+
+  /// Get the source of the bitmap font.
+  Future<String> getSource();
+
+  /// Get the BitmapData for a bitmap font page.
   Future<BitmapData> getBitmapData(int id, String filename);
 }

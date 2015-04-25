@@ -6,8 +6,8 @@ class _BitmapFontFormatJson extends BitmapFontFormat {
 
   Future<BitmapFont> load(BitmapFontLoader bitmapFontLoader) async {
 
-    var description = await bitmapFontLoader.getDescription();
-    var data = JSON.decode(description);
+    var source = await bitmapFontLoader.getSource();
+    var data = JSON.decode(source);
 
     var infoPaddings = _getString(data, "padding", "0,0,0,0").split(",");
     var infoSpacings = _getString(data, "spacing", "0,0").split(",");

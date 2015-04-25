@@ -6,8 +6,8 @@ class _BitmapFontFormatXml extends BitmapFontFormat {
 
   Future<BitmapFont> load(BitmapFontLoader bitmapFontLoader) async {
 
-    var description = await bitmapFontLoader.getDescription();
-    var xml = parse(description);
+    var source = await bitmapFontLoader.getSource();
+    var xml = parse(source);
     var fontXml = xml.findElements("font").first;
     var infoXml = fontXml.findElements("info").first;
     var commonXml = fontXml.findElements("common").first;
