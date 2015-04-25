@@ -2,14 +2,14 @@ part of stagexl_bitmapfont;
 
 class _BitmapFontLoaderTextureAtlas extends BitmapFontLoader {
 
-  final String definition;
+  final String description;
   final TextureAtlas textureAtlas;
 
-  _BitmapFontLoaderTextureAtlas(this.definition, this.textureAtlas);
+  _BitmapFontLoaderTextureAtlas(this.description, this.textureAtlas);
 
   @override
-  Future<String> getDefinition() {
-    return new Future.value(this.definition);
+  Future<String> getDescription() {
+    return new Future.value(this.description);
   }
 
   @override

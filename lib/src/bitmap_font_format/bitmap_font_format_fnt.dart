@@ -6,7 +6,7 @@ class _BitmapFontFormatFnt extends BitmapFontFormat {
 
   Future<BitmapFont> load(BitmapFontLoader bitmapFontLoader) async {
 
-    var definition = await bitmapFontLoader.getDefinition();
+    var description = await bitmapFontLoader.getDescription();
     var argsRegExp = new RegExp(r'\s+(\w+)=((\-?\d+,?)+|"[\w\-\s\(\)._@]*")');
     var lineRegExp = new RegExp(r'(\w+)((' + argsRegExp.pattern + r')+)');
     var splitRegExp = new RegExp(r'\r\n|\r|\n');
@@ -17,7 +17,7 @@ class _BitmapFontFormatFnt extends BitmapFontFormat {
     List<BitmapFontChar> chars = new List<BitmapFontChar>();
     List<BitmapFontKerning> kernings = new List<BitmapFontKerning>();
 
-    for(var line in definition.split(splitRegExp)) {
+    for(var line in description.split(splitRegExp)) {
 
       var match = lineRegExp.firstMatch(line);
       if (match == null) continue;
