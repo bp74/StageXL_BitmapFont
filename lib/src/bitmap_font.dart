@@ -20,44 +20,32 @@ class BitmapFont {
 
   BitmapFont(this.info, this.common, this.pages, this.chars, this.kernings);
 
-  //-----------------------------------------------------------------------------------------------
+  //---------------------------------------------------------------------------
 
   static Future<BitmapFont> load(String url, [
       BitmapFontFormat bitmapFontFormat = BitmapFontFormat.FNT,
-      BitmapDataLoadOptions bitmapDataLoadOptions = null]) {
-
-    if (bitmapDataLoadOptions == null) {
-      bitmapDataLoadOptions = BitmapData.defaultLoadOptions;
-    }
-
-    var loader = new _BitmapFontLoaderFile(url, bitmapDataLoadOptions);
-    return bitmapFontFormat.load(loader);
-  }
+      BitmapDataLoadOptions bitmapDataLoadOptions = null]) =>
+          bitmapFontFormat.load(new _BitmapFontLoaderFile(
+              url, bitmapDataLoadOptions));
 
   static Future<BitmapFont> fromTextureAtlas(
-      String definition, TextureAtlas textureAtlas, [
-      BitmapFontFormat bitmapFontFormat = BitmapFontFormat.FNT]) {
-
-    var loader = new _BitmapFontLoaderTextureAtlas(definition, textureAtlas);
-    return bitmapFontFormat.load(loader);
-  }
+      TextureAtlas textureAtlas, String namePrefix, String description, [
+      BitmapFontFormat bitmapFontFormat = BitmapFontFormat.FNT]) =>
+          bitmapFontFormat.load(new _BitmapFontLoaderTextureAtlas(
+              textureAtlas, namePrefix, description));
 
   static Future<BitmapFont> fromBitmapData(
-      String definition, BitmapData bitmapData, [
-      BitmapFontFormat bitmapFontFormat = BitmapFontFormat.FNT]) {
-
-    var loader = new _BitmapFontLoaderBitmapData(definition, bitmapData);
-    return bitmapFontFormat.load(loader);
-  }
+      BitmapData bitmapData, String description, [
+      BitmapFontFormat bitmapFontFormat = BitmapFontFormat.FNT]) =>
+          bitmapFontFormat.load(new _BitmapFontLoaderBitmapData(
+              bitmapData, description));
 
   static Future<BitmapFont> withLoader(
       BitmapFontLoader bitmapFontLoader, [
-      BitmapFontFormat bitmapFontFormat = BitmapFontFormat.FNT]) {
+      BitmapFontFormat bitmapFontFormat = BitmapFontFormat.FNT]) =>
+          bitmapFontFormat.load(bitmapFontLoader);
 
-    return bitmapFontFormat.load(bitmapFontLoader);
-  }
-
-  //-----------------------------------------------------------------------------------------------
+  //---------------------------------------------------------------------------
 
   BitmapFontChar getChar(int id) {
     for(int i = 0; i < this.chars.length; i++) {

@@ -35,23 +35,23 @@ Future main() async {
 
   resourceManager = new ResourceManager();
   resourceManager.addTextureAtlas("atlas", "../common/images/font_atlas.json");
-  resourceManager.addTextFile("font1", "../common/fonts/fnt/Luckiest_Guy.fnt");
-  resourceManager.addTextFile("font2", "../common/fonts/fnt/Fascinate_Inline.fnt");
-  resourceManager.addTextFile("font3", "../common/fonts/fnt/Sarina.fnt");
-  resourceManager.addTextFile("font4", "../common/fonts/fnt/Sigmar_One.fnt");
+  resourceManager.addTextFile("fnt1", "../common/fonts/fnt/Luckiest_Guy.fnt");
+  resourceManager.addTextFile("fnt2", "../common/fonts/fnt/Fascinate_Inline.fnt");
+  resourceManager.addTextFile("fnt3", "../common/fonts/fnt/Sarina.fnt");
+  resourceManager.addTextFile("fnt4", "../common/fonts/fnt/Sigmar_One.fnt");
   await resourceManager.load();
 
-  var description1 = resourceManager.getTextFile("font1");
-  var description2 = resourceManager.getTextFile("font2");
-  var description3 = resourceManager.getTextFile("font3");
-  var description4 = resourceManager.getTextFile("font4");
+  var fnt1 = resourceManager.getTextFile("fnt1");
+  var fnt2 = resourceManager.getTextFile("fnt2");
+  var fnt3 = resourceManager.getTextFile("fnt3");
+  var fnt4 = resourceManager.getTextFile("fnt4");
 
   var format = BitmapFontFormat.FNT;
   var atlas = resourceManager.getTextureAtlas("atlas");
-  var font1 = await BitmapFont.fromTextureAtlas(description1, atlas, format);
-  var font2 = await BitmapFont.fromTextureAtlas(description2, atlas, format);
-  var font3 = await BitmapFont.fromTextureAtlas(description3, atlas, format);
-  var font4 = await BitmapFont.fromTextureAtlas(description4, atlas, format);
+  var font1 = await BitmapFont.fromTextureAtlas(atlas, "", fnt1, format);
+  var font2 = await BitmapFont.fromTextureAtlas(atlas, "", fnt2, format);
+  var font3 = await BitmapFont.fromTextureAtlas(atlas, "", fnt3, format);
+  var font4 = await BitmapFont.fromTextureAtlas(atlas, "", fnt4, format);
 
   var fonts = [font1, font2, font3, font4];
   var lines = text.split(new RegExp(r"\r\n|\r|\n"));

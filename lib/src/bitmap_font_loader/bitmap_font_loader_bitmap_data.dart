@@ -2,10 +2,10 @@ part of stagexl_bitmapfont;
 
 class _BitmapFontLoaderBitmapData extends BitmapFontLoader {
 
-  final String description;
   final BitmapData bitmapData;
+  final String description;
 
-  _BitmapFontLoaderBitmapData(this.description, this.bitmapData);
+  _BitmapFontLoaderBitmapData(this.bitmapData, this.description);
 
   @override
   Future<String> getDescription() {

@@ -15,7 +15,7 @@ class _BitmapFontLoaderFile extends BitmapFontLoader {
   @override
   Future<BitmapData> getBitmapData(int id, String filename) {
     var regex = new RegExp(r"^(.*/)?(?:$|(.+?)(?:(\.[^.]*$)|$))");
-    var path = regex.firstMatch(descriptionUrl).group(1);
+    var path = regex.firstMatch(this.descriptionUrl).group(1);
     var imageUrl = path == null ? filename : "$path$filename";
     return BitmapData.load(imageUrl, this.bitmapDataLoadOptions);
   }

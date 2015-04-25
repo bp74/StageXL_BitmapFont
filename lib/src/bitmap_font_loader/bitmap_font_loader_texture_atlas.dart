@@ -2,10 +2,11 @@ part of stagexl_bitmapfont;
 
 class _BitmapFontLoaderTextureAtlas extends BitmapFontLoader {
 
-  final String description;
   final TextureAtlas textureAtlas;
+  final String namePrefix;
+  final String description;
 
-  _BitmapFontLoaderTextureAtlas(this.description, this.textureAtlas);
+  _BitmapFontLoaderTextureAtlas(this.textureAtlas, this.namePrefix, this.description);
 
   @override
   Future<String> getDescription() {
@@ -16,7 +17,7 @@ class _BitmapFontLoaderTextureAtlas extends BitmapFontLoader {
   Future<BitmapData> getBitmapData(int id, String filename) {
     var regex = new RegExp(r"(.+?)(\.[^.]*$|$)");
     var match = regex.firstMatch(filename);
-    var name = match.group(1);
+    var name = this.namePrefix + match.group(1);
     return new Future.value(this.textureAtlas.getBitmapData(name));
   }
 }
