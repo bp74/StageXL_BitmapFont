@@ -44,7 +44,7 @@ class _BitmapFontFormatJson extends BitmapFontFormat {
 
     var pages = new List<BitmapFontPage>();
     var file = _getString(data, "file", "");
-    var bitmapData = await bitmapFontLoader.getBitmapData(file);
+    var bitmapData = await bitmapFontLoader.getBitmapData(0, file);
     pages.add(new BitmapFontPage(0, bitmapData));
 
     var charMaps = data["chars"];

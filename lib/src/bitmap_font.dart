@@ -42,6 +42,14 @@ class BitmapFont {
     return bitmapFontFormat.load(loader);
   }
 
+  static Future<BitmapFont> fromBitmapData(
+      String definition, BitmapData bitmapData, [
+      BitmapFontFormat bitmapFontFormat = BitmapFontFormat.FNT]) {
+
+    var loader = new _BitmapDataBitmapFontLoader(definition, bitmapData);
+    return bitmapFontFormat.load(loader);
+  }
+
   static Future<BitmapFont> withLoader(
       BitmapFontLoader bitmapFontLoader, [
       BitmapFontFormat bitmapFontFormat = BitmapFontFormat.FNT]) {

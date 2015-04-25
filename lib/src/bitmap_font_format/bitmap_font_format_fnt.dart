@@ -64,7 +64,7 @@ class _BitmapFontFormatFnt extends BitmapFontFormat {
 
         var id = _getInt(argsMap, "id", 0);
         var file = _getString(argsMap, "file", "");
-        var bitmapData = await bitmapFontLoader.getBitmapData(file);
+        var bitmapData = await bitmapFontLoader.getBitmapData(id, file);
         pages.add(new BitmapFontPage(id, bitmapData));
 
       } else if (chunk == "char") {

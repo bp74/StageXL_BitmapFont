@@ -51,7 +51,7 @@ class _BitmapFontFormatXml extends BitmapFontFormat {
     var futurePages = pageXmls.map((pageXml) async {
       var id = _getInt(pageXml, "id", 0);
       var file = _getString(pageXml, "file", "");
-      var bitmapData = await bitmapFontLoader.getBitmapData(file);
+      var bitmapData = await bitmapFontLoader.getBitmapData(id, file);
       return new BitmapFontPage(id, bitmapData);
     });
 

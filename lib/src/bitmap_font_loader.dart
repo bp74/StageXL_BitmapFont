@@ -4,7 +4,7 @@ part of stagexl_bitmapfont;
 
 abstract class BitmapFontLoader {
   Future<String> getDefinition();
-  Future<BitmapData> getBitmapData(String filename);
+  Future<BitmapData> getBitmapData(int id, String filename);
 }
 
 //-----------------------------------------------------------------------------
@@ -22,7 +22,7 @@ class _FileBitmapFontLoader extends BitmapFontLoader {
   }
 
   @override
-  Future<BitmapData> getBitmapData(String filename) {
+  Future<BitmapData> getBitmapData(int id, String filename) {
     var regex = new RegExp(r"^(.*/)?(?:$|(.+?)(?:(\.[^.]*$)|$))");
     var path = regex.firstMatch(url).group(1);
     var imageUrl = path == null ? filename : "$path$filename";
@@ -45,10 +45,32 @@ class _TextureAtlasBitmapFontLoader extends BitmapFontLoader {
   }
 
   @override
-  Future<BitmapData> getBitmapData(String filename) {
+  Future<BitmapData> getBitmapData(int id, String filename) {
     var regex = new RegExp(r"(.+?)(\.[^.]*$|$)");
     var match = regex.firstMatch(filename);
     var name = match.group(1);
     return new Future.value(this.textureAtlas.getBitmapData(name));
+  }
+}
+
+class _BitmapDataBitmapFontLoader extends BitmapFontLoader {
+
+  final String definition;
+  final BitmapData bitmapData;
+
+  _BitmapDataBitmapFontLoader(this.definition, this.bitmapData);
+
+  @override
+  Future<String> getDefinition() {
+    return new Future.value(this.definition);
+  }
+
+  @override
+  Future<BitmapData> getBitmapData(int id, String filename) {
+    if (id == 0) {
+      return new Future.value(this.bitmapData);
+    } else {
+      throw new StateError("Only single BitmapData fonts are supported");
+    }
   }
 }
