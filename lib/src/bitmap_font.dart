@@ -30,7 +30,7 @@ class BitmapFont {
       bitmapDataLoadOptions = BitmapData.defaultLoadOptions;
     }
 
-    var loader = new _FileBitmapFontLoader(url, bitmapDataLoadOptions);
+    var loader = new _BitmapFontLoaderFile(url, bitmapDataLoadOptions);
     return bitmapFontFormat.load(loader);
   }
 
@@ -38,7 +38,7 @@ class BitmapFont {
       String definition, TextureAtlas textureAtlas, [
       BitmapFontFormat bitmapFontFormat = BitmapFontFormat.FNT]) {
 
-    var loader = new _TextureAtlasBitmapFontLoader(definition, textureAtlas);
+    var loader = new _BitmapFontLoaderTextureAtlas(definition, textureAtlas);
     return bitmapFontFormat.load(loader);
   }
 
@@ -46,7 +46,7 @@ class BitmapFont {
       String definition, BitmapData bitmapData, [
       BitmapFontFormat bitmapFontFormat = BitmapFontFormat.FNT]) {
 
-    var loader = new _BitmapDataBitmapFontLoader(definition, bitmapData);
+    var loader = new _BitmapFontLoaderBitmapData(definition, bitmapData);
     return bitmapFontFormat.load(loader);
   }
 
