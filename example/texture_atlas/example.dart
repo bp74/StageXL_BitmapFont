@@ -41,17 +41,17 @@ Future main() async {
   resourceManager.addTextFile("font4", "../common/fonts/fnt/Sigmar_One.fnt");
   await resourceManager.load();
 
-  var definition1 = resourceManager.getTextFile("font1");
-  var definition2 = resourceManager.getTextFile("font2");
-  var definition3 = resourceManager.getTextFile("font3");
-  var definition4 = resourceManager.getTextFile("font4");
+  var description1 = resourceManager.getTextFile("font1");
+  var description2 = resourceManager.getTextFile("font2");
+  var description3 = resourceManager.getTextFile("font3");
+  var description4 = resourceManager.getTextFile("font4");
 
   var format = BitmapFontFormat.FNT;
   var atlas = resourceManager.getTextureAtlas("atlas");
-  var font1 = await BitmapFont.fromTextureAtlas(definition1, atlas, format);
-  var font2 = await BitmapFont.fromTextureAtlas(definition2, atlas, format);
-  var font3 = await BitmapFont.fromTextureAtlas(definition3, atlas, format);
-  var font4 = await BitmapFont.fromTextureAtlas(definition4, atlas, format);
+  var font1 = await BitmapFont.fromTextureAtlas(description1, atlas, format);
+  var font2 = await BitmapFont.fromTextureAtlas(description2, atlas, format);
+  var font3 = await BitmapFont.fromTextureAtlas(description3, atlas, format);
+  var font4 = await BitmapFont.fromTextureAtlas(description4, atlas, format);
 
   var fonts = [font1, font2, font3, font4];
   var lines = text.split(new RegExp(r"\r\n|\r|\n"));
