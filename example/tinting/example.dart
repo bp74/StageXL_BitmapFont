@@ -46,10 +46,7 @@ Future main() async {
 void tintBitmapText(BitmapText bitmapText) {
   var random = new math.Random();
   for(var bitmap in bitmapText.children) {
-    var r = random.nextInt(100) + 155;
-    var g = random.nextInt(100) + 155;
-    var b = random.nextInt(100) + 155;
-    var color = 0xFF000000 + (r << 16) + (g << 8) + (b << 0);
+    var color = 0xFF000000 + random.nextInt(0xFFFFFF);
     var filter = new TintFilter.fromColor(color);
     bitmap.filters = [filter];
   }
