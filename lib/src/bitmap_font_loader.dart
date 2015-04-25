@@ -1,12 +1,16 @@
 part of stagexl_bitmapfont;
 
-/// The base class for a custom BitmapFontLoader.
+/// The base class for a custom bitmap font loader.
+///
+/// Use the [BitmapFont.withLoader] function to load a bitmap font
+/// from a custom source by implementing a BitmapFontLoader class.
 
 abstract class BitmapFontLoader {
   Future<String> getDefinition();
   Future<BitmapData> getBitmapData(int id, String filename);
 }
 
+//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
 class _FileBitmapFontLoader extends BitmapFontLoader {
@@ -53,6 +57,8 @@ class _TextureAtlasBitmapFontLoader extends BitmapFontLoader {
   }
 }
 
+//-----------------------------------------------------------------------------
+
 class _BitmapDataBitmapFontLoader extends BitmapFontLoader {
 
   final String definition;
@@ -70,7 +76,7 @@ class _BitmapDataBitmapFontLoader extends BitmapFontLoader {
     if (id == 0) {
       return new Future.value(this.bitmapData);
     } else {
-      throw new StateError("Only single BitmapData fonts are supported");
+      throw new StateError("Only single BitmapData fonts are supported.");
     }
   }
 }
