@@ -4,16 +4,10 @@ class _BitmapFontFormatJson extends BitmapFontFormat {
 
   const _BitmapFontFormatJson();
 
-  Future<BitmapFont> load(String url, BitmapDataLoadOptions bitmapDataLoadOptions) async {
+  Future<BitmapFont> load(BitmapFontLoader bitmapFontLoader) async {
 
-    if (bitmapDataLoadOptions == null) {
-      bitmapDataLoadOptions = BitmapData.defaultLoadOptions;
-    }
-
-    // TODO: add support for HiDpi textures
-
-    var json = await HttpRequest.getString(url);
-    var data = JSON.decode(json);
+    var definition = await bitmapFontLoader.getDefinition();
+    var data = JSON.decode(definition);
 
     var infoPaddings = _getString(data, "padding", "0,0,0,0").split(",");
     var infoSpacings = _getString(data, "spacing", "0,0").split(",");
@@ -50,8 +44,7 @@ class _BitmapFontFormatJson extends BitmapFontFormat {
 
     var pages = new List<BitmapFontPage>();
     var file = _getString(data, "file", "");
-    var imageUrl = _replaceFilename(url, file);
-    var bitmapData = await BitmapData.load(imageUrl);
+    var bitmapData = await bitmapFontLoader.getBitmapData(file);
     pages.add(new BitmapFontPage(0, bitmapData));
 
     var charMaps = data["chars"];

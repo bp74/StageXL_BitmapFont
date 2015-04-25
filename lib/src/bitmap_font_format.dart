@@ -10,12 +10,5 @@ abstract class BitmapFontFormat {
 
   const BitmapFontFormat();
 
-  Future<BitmapFont> load(String url, BitmapDataLoadOptions bitmapDataLoadOptions);
-
-  String _replaceFilename(String url, String filename) {
-    RegExp regex = new RegExp(r"^(.*/)?(?:$|(.+?)(?:(\.[^.]*$)|$))");
-    Match match = regex.firstMatch(url);
-    String path = match.group(1);
-    return (path == null) ? filename : "$path$filename";
-  }
+  Future<BitmapFont> load(BitmapFontLoader bitmapFontLoader);
 }

@@ -4,15 +4,9 @@ class _BitmapFontFormatFnt extends BitmapFontFormat {
 
   const _BitmapFontFormatFnt();
 
-  Future<BitmapFont> load(String url, BitmapDataLoadOptions bitmapDataLoadOptions) async {
+  Future<BitmapFont> load(BitmapFontLoader bitmapFontLoader) async {
 
-    if (bitmapDataLoadOptions == null) {
-      bitmapDataLoadOptions = BitmapData.defaultLoadOptions;
-    }
-
-    // TODO: add support for HiDpi textures
-
-    var text = await HttpRequest.getString(url);
+    var definition = await bitmapFontLoader.getDefinition();
     var argsRegExp = new RegExp(r'\s+(\w+)=((\-?\d+,?)+|"[\w\-\s\(\)._@]*")');
     var lineRegExp = new RegExp(r'(\w+)((' + argsRegExp.pattern + r')+)');
     var splitRegExp = new RegExp(r'\r\n|\r|\n');
@@ -23,7 +17,7 @@ class _BitmapFontFormatFnt extends BitmapFontFormat {
     List<BitmapFontChar> chars = new List<BitmapFontChar>();
     List<BitmapFontKerning> kernings = new List<BitmapFontKerning>();
 
-    for(var line in text.split(splitRegExp)) {
+    for(var line in definition.split(splitRegExp)) {
 
       var match = lineRegExp.firstMatch(line);
       if (match == null) continue;
@@ -70,8 +64,7 @@ class _BitmapFontFormatFnt extends BitmapFontFormat {
 
         var id = _getInt(argsMap, "id", 0);
         var file = _getString(argsMap, "file", "");
-        var imageUrl = _replaceFilename(url, file);
-        var bitmapData = await BitmapData.load(imageUrl);
+        var bitmapData = await bitmapFontLoader.getBitmapData(file);
         pages.add(new BitmapFontPage(id, bitmapData));
 
       } else if (chunk == "char") {

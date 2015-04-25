@@ -4,16 +4,10 @@ class _BitmapFontFormatXml extends BitmapFontFormat {
 
   const _BitmapFontFormatXml();
 
-  Future<BitmapFont> load(String url, BitmapDataLoadOptions bitmapDataLoadOptions) async {
+  Future<BitmapFont> load(BitmapFontLoader bitmapFontLoader) async {
 
-    if (bitmapDataLoadOptions == null) {
-      bitmapDataLoadOptions = BitmapData.defaultLoadOptions;
-    }
-
-    // TODO: add support for HiDpi textures
-
-    var xmlText = await HttpRequest.getString(url);
-    var xml = parse(xmlText);
+    var definition = await bitmapFontLoader.getDefinition();
+    var xml = parse(definition);
     var fontXml = xml.findElements("font").first;
     var infoXml = fontXml.findElements("info").first;
     var commonXml = fontXml.findElements("common").first;
@@ -57,8 +51,7 @@ class _BitmapFontFormatXml extends BitmapFontFormat {
     var futurePages = pageXmls.map((pageXml) async {
       var id = _getInt(pageXml, "id", 0);
       var file = _getString(pageXml, "file", "");
-      var imageUrl = _replaceFilename(url, file);
-      var bitmapData = await BitmapData.load(imageUrl);
+      var bitmapData = await bitmapFontLoader.getBitmapData(file);
       return new BitmapFontPage(id, bitmapData);
     });
 

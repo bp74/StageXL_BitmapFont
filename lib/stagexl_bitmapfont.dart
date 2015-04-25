@@ -19,5 +19,6 @@ part 'src/bitmap_font_format/bitmap_font_format_json.dart';
 
 part 'src/bitmap_font.dart';
 part 'src/bitmap_font_format.dart';
+part 'src/bitmap_font_loader.dart';
 part 'src/bitmap_text.dart';
 

@@ -23,10 +23,30 @@ class BitmapFont {
   //-----------------------------------------------------------------------------------------------
 
   static Future<BitmapFont> load(String url, [
-    BitmapFontFormat bitmapFontFormat = BitmapFontFormat.FNT,
-    BitmapDataLoadOptions bitmapDataLoadOptions]) {
+      BitmapFontFormat bitmapFontFormat = BitmapFontFormat.FNT,
+      BitmapDataLoadOptions bitmapDataLoadOptions = null]) {
 
-    return bitmapFontFormat.load(url, bitmapDataLoadOptions);
+    if (bitmapDataLoadOptions == null) {
+      bitmapDataLoadOptions = BitmapData.defaultLoadOptions;
+    }
+
+    var loader = new _FileBitmapFontLoader(url, bitmapDataLoadOptions);
+    return bitmapFontFormat.load(loader);
+  }
+
+  static Future<BitmapFont> fromTextureAtlas(
+      String definition, TextureAtlas textureAtlas, [
+      BitmapFontFormat bitmapFontFormat = BitmapFontFormat.FNT]) {
+
+    var loader = new _TextureAtlasBitmapFontLoader(definition, textureAtlas);
+    return bitmapFontFormat.load(loader);
+  }
+
+  static Future<BitmapFont> withLoader(
+      BitmapFontLoader bitmapFontLoader, [
+      BitmapFontFormat bitmapFontFormat = BitmapFontFormat.FNT]) {
+
+    return bitmapFontFormat.load(bitmapFontLoader);
   }
 
   //-----------------------------------------------------------------------------------------------
