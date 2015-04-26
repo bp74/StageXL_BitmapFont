@@ -48,12 +48,12 @@ Future main() async {
 
   var format = BitmapFontFormat.FNT;
   var atlas = resourceManager.getTextureAtlas("atlas");
-  var font1 = await BitmapFont.fromTextureAtlas(atlas, "", source1, format);
-  var font2 = await BitmapFont.fromTextureAtlas(atlas, "", source2, format);
-  var font3 = await BitmapFont.fromTextureAtlas(atlas, "", source3, format);
-  var font4 = await BitmapFont.fromTextureAtlas(atlas, "", source4, format);
+  var fonts = await Future.wait([
+    BitmapFont.fromTextureAtlas(atlas, "", source1, format),
+    BitmapFont.fromTextureAtlas(atlas, "", source2, format),
+    BitmapFont.fromTextureAtlas(atlas, "", source3, format),
+    BitmapFont.fromTextureAtlas(atlas, "", source4, format)]);
 
-  var fonts = [font1, font2, font3, font4];
   var lines = text.split(new RegExp(r"\r\n|\r|\n"));
 
   for(int i = 0; i < lines.length; i++) {
