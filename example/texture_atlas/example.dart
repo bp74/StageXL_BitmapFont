@@ -41,13 +41,13 @@ Future main() async {
   resourceManager.addTextFile("fnt4", "../common/fonts/fnt/Sigmar_One.fnt");
   await resourceManager.load();
 
+  var format = BitmapFontFormat.FNT;
+  var atlas = resourceManager.getTextureAtlas("atlas");
   var source1 = resourceManager.getTextFile("fnt1");
   var source2 = resourceManager.getTextFile("fnt2");
   var source3 = resourceManager.getTextFile("fnt3");
   var source4 = resourceManager.getTextFile("fnt4");
 
-  var format = BitmapFontFormat.FNT;
-  var atlas = resourceManager.getTextureAtlas("atlas");
   var fonts = await Future.wait([
     BitmapFont.fromTextureAtlas(atlas, "", source1, format),
     BitmapFont.fromTextureAtlas(atlas, "", source2, format),
