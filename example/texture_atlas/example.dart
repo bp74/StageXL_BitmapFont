@@ -52,11 +52,12 @@ Future main() async {
     BitmapFont.fromTextureAtlas(atlas, "", source1, format),
     BitmapFont.fromTextureAtlas(atlas, "", source2, format),
     BitmapFont.fromTextureAtlas(atlas, "", source3, format),
-    BitmapFont.fromTextureAtlas(atlas, "", source4, format)]);
+    BitmapFont.fromTextureAtlas(atlas, "", source4, format)
+  ]);
 
   var lines = text.split(new RegExp(r"\r\n|\r|\n"));
 
-  for(int i = 0; i < lines.length; i++) {
+  for (int i = 0; i < lines.length; i++) {
     var font = fonts[i % fonts.length];
     var bitmapText = new BitmapText(font);
     bitmapText.x = 50;
@@ -71,7 +72,7 @@ Future main() async {
 
 void animateBitmapText(BitmapText bitmapText) {
 
-  for(var bitmap in bitmapText.children) {
+  for (var bitmap in bitmapText.children) {
     bitmap.pivotX = bitmap.width / 2;
     bitmap.pivotY = bitmap.height / 2;
     bitmap.x += bitmap.pivotX;
@@ -83,12 +84,8 @@ void animateBitmapText(BitmapText bitmapText) {
   stage.juggler.add(transition);
 
   transition.onUpdate = (value) {
-    for(var bitmap in bitmapText.children) {
+    for (var bitmap in bitmapText.children) {
       bitmap.rotation = 0.2 * math.sin(value + bitmap.x);
     }
   };
 }
-
-
-
-

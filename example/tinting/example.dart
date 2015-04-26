@@ -19,7 +19,6 @@ Future main() async {
   StageXL.bitmapDataLoadOptions.webp = true;
 
   var canvas = html.querySelector('#stage');
-
   stage = new Stage(canvas, webGL: true, width: 800, height: 400, color: Color.DarkSlateGray);
   stage.scaleMode = StageScaleMode.SHOW_ALL;
   stage.align = StageAlign.NONE;
@@ -45,7 +44,7 @@ Future main() async {
 
 void tintBitmapText(BitmapText bitmapText) {
   var random = new math.Random();
-  for(var bitmap in bitmapText.children) {
+  for (var bitmap in bitmapText.children) {
     var color = 0xFF000000 + random.nextInt(0xFFFFFF);
     var filter = new TintFilter.fromColor(color);
     bitmap.filters = [filter];
@@ -56,7 +55,7 @@ void tintBitmapText(BitmapText bitmapText) {
 
 void animateBitmapText(BitmapText bitmapText) {
 
-  for(var bitmap in bitmapText.children) {
+  for (var bitmap in bitmapText.children) {
     bitmap.pivotX = bitmap.width / 2;
     bitmap.pivotY = bitmap.height / 2;
     bitmap.x += bitmap.pivotX;
@@ -68,10 +67,8 @@ void animateBitmapText(BitmapText bitmapText) {
   stage.juggler.add(transition);
 
   transition.onUpdate = (value) {
-    for(var bitmap in bitmapText.children) {
+    for (var bitmap in bitmapText.children) {
       bitmap.rotation = 0.2 * math.sin(value + bitmap.x);
     }
   };
 }
-
-
