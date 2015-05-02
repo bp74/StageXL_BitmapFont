@@ -4,46 +4,55 @@ import 'dart:math' as math;
 import 'package:stagexl/stagexl.dart';
 import 'package:stagexl_bitmapfont/stagexl_bitmapfont.dart';
 
-Stage stage;
-RenderLoop renderLoop;
-ResourceManager resourceManager = new ResourceManager();
-
 String text = """
-Hello World!
-Grumpy wizards make 
-toxic brew for the 
-evil Queen and Jack.""";
+Lorem ipsum dolor sit amet, consetetur
+sadipscing elitr, sed diam nonumy eirmod
+tempor invidunt ut labore et dolore magna
+aliquyam erat, sed diam voluptua. At vero
+eos et accusam et justo duo dolores et ea
+rebum. Stet clita kasd gubergren, no sea
+takimata sanctus est Lorem ipsum dolor
+sit amet.""";
 
 Future main() async {
 
+  // Configure StageXL default options
+
+  StageXL.stageOptions.renderEngine = RenderEngine.WebGL;
+  StageXL.stageOptions.backgroundColor = Color.LightCyan;
   StageXL.bitmapDataLoadOptions.webp = true;
 
-  var canvas = html.querySelector('#stage');
-  stage = new Stage(canvas, webGL: true, width: 800, height: 400, color: Color.DarkSlateGray);
-  stage.scaleMode = StageScaleMode.SHOW_ALL;
-  stage.align = StageAlign.NONE;
+  // Init Stage and RenderLoop
 
-  renderLoop = new RenderLoop();
+  var stage = new Stage(html.querySelector('#stage'), width: 1600, height: 700);
+  var renderLoop = new RenderLoop();
   renderLoop.addStage(stage);
 
-  var fontUrl = "../common/fonts/fnt/Fascinate_Inline.fnt";
-  var bitmapFontFormat = BitmapFontFormat.FNT;
-  var bitmapFont = await BitmapFont.load(fontUrl, bitmapFontFormat);
-  var bitmapText = new BitmapText(bitmapFont);
+  // load BitmapFont
 
+  var fontUrl = "../common/fonts/fnt/Fascinate_Inline.fnt";
+  var bitmapFont = await BitmapFont.load(fontUrl, BitmapFontFormat.FNT);
+
+  // create BitmapText and add it to the Stage
+
+  var bitmapText = new BitmapText(bitmapFont);
   bitmapText.x = 50;
   bitmapText.y = 50;
   bitmapText.text = text;
   bitmapText.addTo(stage);
 
+  // add an individual TintFilter to each character
+
   tintBitmapText(bitmapText);
-  animateBitmapText(bitmapText);
+  animateBitmapText(bitmapText, stage.juggler);
 }
 
 //-----------------------------------------------------------------------------
 
 void tintBitmapText(BitmapText bitmapText) {
+
   var random = new math.Random();
+
   for (var bitmap in bitmapText.children) {
     var color = 0xFF000000 + random.nextInt(0xFFFFFF);
     var filter = new TintFilter.fromColor(color);
@@ -53,7 +62,7 @@ void tintBitmapText(BitmapText bitmapText) {
 
 //-----------------------------------------------------------------------------
 
-void animateBitmapText(BitmapText bitmapText) {
+void animateBitmapText(BitmapText bitmapText, Juggler juggler) {
 
   for (var bitmap in bitmapText.children) {
     bitmap.pivotX = bitmap.width / 2;
@@ -62,13 +71,9 @@ void animateBitmapText(BitmapText bitmapText) {
     bitmap.y += bitmap.pivotY;
   }
 
-  var transtionFunction = TransitionFunction.linear;
-  var transition = new Transition(0, 10000, 1200, transtionFunction);
-  stage.juggler.add(transition);
-
-  transition.onUpdate = (value) {
+  juggler.transition(0, 10000, 1200, TransitionFunction.linear, (value) {
     for (var bitmap in bitmapText.children) {
       bitmap.rotation = 0.2 * math.sin(value + bitmap.x);
     }
-  };
+  });
 }
