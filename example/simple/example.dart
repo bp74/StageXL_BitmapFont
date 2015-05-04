@@ -58,7 +58,7 @@ Future animateBitmapText(BitmapText bitmapText, Juggler juggler) async {
     bitmap.y += bitmap.pivotY;
   }
 
-  await for (var elapsedTime in juggler.onElapsedTimeChanged) {
+  await for (var elapsedTime in juggler.onElapsedTimeChange) {
     for (var bitmap in bitmapText.children) {
       bitmap.rotation = 0.2 * math.sin(elapsedTime * 8 + bitmap.x);
     }
