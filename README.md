@@ -1,6 +1,8 @@
 The StageXL BitmapFont library is an extension to the StageXL library and 
 provides support for bitmap fonts.  
 
+[![Build Status](https://travis-ci.org/bp74/StageXL_BitmapFont.svg?branch=master)](https://travis-ci.org/bp74/StageXL_BitmapFont)
+
 ## Bitmap Fonts
 
 Bitmap fonts can be created with different tools, 
