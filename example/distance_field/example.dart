@@ -40,8 +40,20 @@ Future main() async {
 
   // add the DistanceFieldFilter for sharp edges
 
-  var filter = new DistanceFieldFilter(Color.White);
-  bitmapText.filters = [filter];
+  var filter1 = new DistanceFieldFilter();
+  var filter2 = new DistanceFieldOutlineFilter();
+
+  var filters = [filter1, filter2];
+  var filterIndex = 0;
+
+  bitmapText.filters.clear();
+  bitmapText.filters.add(filters[0]);
+
+  stage.onMouseClick.listen((mouseEvent) {
+    filterIndex = (filterIndex + 1) % filters.length;
+    bitmapText.filters.clear();
+    bitmapText.filters.add(filters[filterIndex]);
+  });
 
   // animate BitmapText
 

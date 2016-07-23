@@ -1,29 +1,34 @@
 part of stagexl_bitmapfont;
 
-class DistanceFieldFilter extends BitmapFilter {
+class DistanceFieldOutlineFilter extends BitmapFilter {
 
   /// The color inside of the edges.
   int innerColor;
+
+  /// The color of the outline.
+  int outlineColor;
 
   /// This configuration of the distance field;
   DistanceFieldConfig config;
 
   //---------------------------------------------------------------------------
 
-  DistanceFieldFilter({
+  DistanceFieldOutlineFilter({
     this.innerColor: Color.White,
+    this.outlineColor: Color.Black,
     this.config}) {
     this.config ??= new DistanceFieldConfig();
   }
 
-  BitmapFilter clone() => new DistanceFieldFilter(
+  BitmapFilter clone() => new DistanceFieldOutlineFilter(
       innerColor: this.innerColor,
+      outlineColor: this.outlineColor,
       config: this.config.clone());
 
   //---------------------------------------------------------------------------
 
   void apply(BitmapData bitmapData, [Rectangle<num> rectangle]) {
-    // TODO: implement DistanceFieldFilter for BitmapDatas.
+    // TODO: implement DistanceFieldOutlineFilter for BitmapDatas.
   }
 
   //---------------------------------------------------------------------------
@@ -33,13 +38,15 @@ class DistanceFieldFilter extends BitmapFilter {
 
     RenderContextWebGL renderContext = renderState.renderContext;
     RenderTexture renderTexture = renderTextureQuad.renderTexture;
+    DistanceFieldOutlineFilterProgram renderProgram;
 
-    DistanceFieldFilterProgram renderProgram = renderContext.getRenderProgram(
-        r"$DistanceFieldFilterProgram", () => new DistanceFieldFilterProgram());
+    renderProgram = renderContext.getRenderProgram(
+        r"$DistanceFieldOutlineFilterProgram",
+        () => new DistanceFieldOutlineFilterProgram());
 
     renderContext.activateRenderProgram(renderProgram);
     renderContext.activateRenderTexture(renderTexture);
-    renderProgram.renderDistanceFieldFilterQuad(
+    renderProgram.renderDistanceFieldOutlineFilterQuad(
         renderState, renderTextureQuad, this);
   }
 }
@@ -47,12 +54,14 @@ class DistanceFieldFilter extends BitmapFilter {
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-class DistanceFieldFilterProgram extends RenderProgram {
+class DistanceFieldOutlineFilterProgram extends RenderProgram {
 
   // aPosition:   Float32(x), Float32(y)
   // aTexCoord:   Float32(u), Float32(v)
   // aInnerColor: Float32(r), Float32(g), Float32(b), Float32(a)
-  // aThreshold:  Float32(thresholdMin), Float32(thresholdMax)
+  // aOuterColor: Float32(r), Float32(g), Float32(b), Float32(a)
+  // aSetup:      Float32(innerThresholdMin), Float32(innerThresholdMax),
+  //              Float32(outerThresholdMin), Float32(outerThresholdMax),
 
   @override
   String get vertexShaderSource => """
@@ -62,16 +71,19 @@ class DistanceFieldFilterProgram extends RenderProgram {
     attribute vec2 aPosition;
     attribute vec2 aTexCoord;
     attribute vec4 aInnerColor;
-    attribute vec2 aThreshold;
+    attribute vec4 aOuterColor;
+    attribute vec4 aThreshold;
 
     varying vec2 vTexCoord;
     varying vec4 vInnerColor;
-    varying vec2 vThreshold;
+    varying vec4 vOuterColor;
+    varying vec4 vThreshold;
 
     void main() {
       vTexCoord = aTexCoord;
       vThreshold = aThreshold;
       vInnerColor = vec4(aInnerColor.rgb * aInnerColor.a, aInnerColor.a);
+      vOuterColor = vec4(aOuterColor.rgb * aOuterColor.a, aOuterColor.a);
       gl_Position = vec4(aPosition, 0.0, 1.0) * uProjectionMatrix;
     }
     """;
@@ -84,12 +96,15 @@ class DistanceFieldFilterProgram extends RenderProgram {
 
     varying vec2 vTexCoord;
     varying vec4 vInnerColor;
-    varying vec2 vThreshold;
+    varying vec4 vOuterColor;
+    varying vec4 vThreshold;
 
     void main() {
       float dist = texture2D(uSampler, vTexCoord).a;
-      float alpha = smoothstep(vThreshold.x, vThreshold.y, dist);
-      gl_FragColor = vInnerColor * alpha;
+      float innerAlpha = smoothstep(vThreshold.x, vThreshold.y, dist);
+      float outerAlpha = smoothstep(vThreshold.z, vThreshold.w, dist);
+      outerAlpha = max(outerAlpha - innerAlpha, 0.0);
+      gl_FragColor = vInnerColor * innerAlpha + vOuterColor * outerAlpha;
     }
     """;
 
@@ -102,18 +117,19 @@ class DistanceFieldFilterProgram extends RenderProgram {
 
     renderingContext.uniform1i(uniforms["uSampler"], 0);
 
-    renderBufferVertex.bindAttribute(attributes["aPosition"],   2, 40, 0);
-    renderBufferVertex.bindAttribute(attributes["aTexCoord"],   2, 40, 8);
-    renderBufferVertex.bindAttribute(attributes["aInnerColor"], 4, 40, 16);
-    renderBufferVertex.bindAttribute(attributes["aThreshold"],  2, 40, 32);
+    renderBufferVertex.bindAttribute(attributes["aPosition"],   2, 64, 0);
+    renderBufferVertex.bindAttribute(attributes["aTexCoord"],   2, 64, 8);
+    renderBufferVertex.bindAttribute(attributes["aInnerColor"], 4, 64, 16);
+    renderBufferVertex.bindAttribute(attributes["aOuterColor"], 4, 64, 32);
+    renderBufferVertex.bindAttribute(attributes["aThreshold"],  4, 64, 48);
   }
 
   //---------------------------------------------------------------------------
 
-  void renderDistanceFieldFilterQuad(
+  void renderDistanceFieldOutlineFilterQuad(
       RenderState renderState,
       RenderTextureQuad renderTextureQuad,
-      DistanceFieldFilter distanceFieldFilter) {
+      DistanceFieldOutlineFilter distanceFieldOutlineFilter) {
 
     var alpha = renderState.globalAlpha;
     var matrix = renderState.globalMatrix;
@@ -124,22 +140,33 @@ class DistanceFieldFilterProgram extends RenderProgram {
 
     // setup
 
-    int color = distanceFieldFilter.innerColor;
-    num colorA = ((color >> 24) & 0xFF) / 255.0 * alpha;
-    num colorR = ((color >> 16) & 0xFF) / 255.0;
-    num colorG = ((color >>  8) & 0xFF) / 255.0;
-    num colorB = ((color >>  0) & 0xFF) / 255.0;
+    int innerColor = distanceFieldOutlineFilter.innerColor;
+    num innerColorA = ((innerColor >> 24) & 0xFF) / 255.0 * alpha;
+    num innerColorR = ((innerColor >> 16) & 0xFF) / 255.0;
+    num innerColorG = ((innerColor >>  8) & 0xFF) / 255.0;
+    num innerColorB = ((innerColor >>  0) & 0xFF) / 255.0;
 
-    num threshold = distanceFieldFilter.config.threshold;
-    num softness = distanceFieldFilter.config.softness;
+    int outerColor = distanceFieldOutlineFilter.outlineColor;
+    num outerColorA = ((outerColor >> 24) & 0xFF) / 255.0 * alpha;
+    num outerColorR = ((outerColor >> 16) & 0xFF) / 255.0;
+    num outerColorG = ((outerColor >>  8) & 0xFF) / 255.0;
+    num outerColorB = ((outerColor >>  0) & 0xFF) / 255.0;
+
+    num threshold = distanceFieldOutlineFilter.config.threshold;
+    num softness = distanceFieldOutlineFilter.config.softness;
+    num range = distanceFieldOutlineFilter.config.outline;
     num scale = math.sqrt(matrix.det);
 
     num gamma = softness / scale;
-    num thresholdMin = threshold - gamma;
-    num thresholdMax = threshold + gamma;
+    num innerThresholdMin = threshold + range - gamma;
+    num innerThresholdMax = threshold + range + gamma;
+    num outerThresholdMin = threshold - range - gamma;
+    num outerThresholdMax = threshold - range + gamma;
 
-    if (thresholdMin < 0.0) thresholdMin = 0.0;
-    if (thresholdMax > 1.0) thresholdMax = 1.0;
+    if (innerThresholdMin < 0.0) innerThresholdMin = 0.0;
+    if (innerThresholdMax > 1.0) innerThresholdMax = 1.0;
+    if (outerThresholdMin < 0.0) outerThresholdMin = 0.0;
+    if (outerThresholdMax > 1.0) outerThresholdMax = 1.0;
 
     // check buffer sizes and flush if necessary
 
@@ -149,7 +176,7 @@ class DistanceFieldFilterProgram extends RenderProgram {
 
     var vxData = renderBufferVertex.data;
     var vxPosition = renderBufferVertex.position;
-    if (vxPosition + vertexCount * 10 >= vxData.length) flush();
+    if (vxPosition + vertexCount * 16 >= vxData.length) flush();
 
     var ixIndex = renderBufferIndex.position;
     var vxIndex = renderBufferVertex.position;
@@ -180,16 +207,22 @@ class DistanceFieldFilterProgram extends RenderProgram {
       vxData[vxIndex + 01] = my + mb * x + md * y;
       vxData[vxIndex + 02] = vxList[o + 2];
       vxData[vxIndex + 03] = vxList[o + 3];
-      vxData[vxIndex + 04] = colorR;
-      vxData[vxIndex + 05] = colorG;
-      vxData[vxIndex + 06] = colorB;
-      vxData[vxIndex + 07] = colorA;
-      vxData[vxIndex + 08] = thresholdMin;
-      vxData[vxIndex + 09] = thresholdMax;
-      vxIndex += 10;
+      vxData[vxIndex + 04] = innerColorR;
+      vxData[vxIndex + 05] = innerColorG;
+      vxData[vxIndex + 06] = innerColorB;
+      vxData[vxIndex + 07] = innerColorA;
+      vxData[vxIndex + 08] = outerColorR;
+      vxData[vxIndex + 09] = outerColorG;
+      vxData[vxIndex + 10] = outerColorB;
+      vxData[vxIndex + 11] = outerColorA;
+      vxData[vxIndex + 12] = innerThresholdMin;
+      vxData[vxIndex + 13] = innerThresholdMax;
+      vxData[vxIndex + 14] = outerThresholdMin;
+      vxData[vxIndex + 15] = outerThresholdMax;
+      vxIndex += 16;
     }
 
-    renderBufferVertex.position += vertexCount * 10;
+    renderBufferVertex.position += vertexCount * 16;
     renderBufferVertex.count += vertexCount;
   }
 
