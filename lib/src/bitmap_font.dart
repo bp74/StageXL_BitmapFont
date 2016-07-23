@@ -75,7 +75,7 @@ class BitmapFont {
   RenderTextureQuad createRenderTextureQuad(String text) {
 
     if (this.pages.length != 1) {
-      throw new StateError("Only single page fonts are supported.");
+      throw new StateError("Not supported for multi page bitmap fonts.");
     }
 
     int ixOffset = 0;
