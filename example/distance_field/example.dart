@@ -40,8 +40,9 @@ Future main() async {
 
   // add the DistanceFieldFilter for sharp edges
 
-  var filter1 = new DistanceFieldFilter();
-  var filter2 = new DistanceFieldOutlineFilter();
+  var config = new DistanceFieldConfig();
+  var filter1 = new DistanceFieldFilter(config: config);
+  var filter2 = new DistanceFieldOutlineFilter(config: config);
 
   var filters = [filter1, filter2];
   var filterIndex = 0;
@@ -58,7 +59,7 @@ Future main() async {
   // animate BitmapText
 
   await for (var elapsedTime in stage.juggler.onElapsedTimeChange) {
-    var scale = 1.75 + 1.5 * math.sin(elapsedTime * 0.5);
+    var scale = 2.0 + 1.5 * math.sin(elapsedTime * 0.5);
     bitmapText.scaleX = bitmapText.scaleY = scale;
   }
 

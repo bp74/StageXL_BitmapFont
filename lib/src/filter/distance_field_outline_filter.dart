@@ -154,14 +154,13 @@ class DistanceFieldOutlineFilterProgram extends RenderProgram {
 
     num threshold = distanceFieldOutlineFilter.config.threshold;
     num softness = distanceFieldOutlineFilter.config.softness;
-    num range = distanceFieldOutlineFilter.config.outline;
+    num outline = distanceFieldOutlineFilter.config.outline;
     num scale = math.sqrt(matrix.det);
-
     num gamma = softness / scale;
-    num innerThresholdMin = threshold + range - gamma;
-    num innerThresholdMax = threshold + range + gamma;
-    num outerThresholdMin = threshold - range - gamma;
-    num outerThresholdMax = threshold - range + gamma;
+    num innerThresholdMin = threshold + outline - gamma;
+    num innerThresholdMax = threshold + outline + gamma;
+    num outerThresholdMin = threshold - outline - gamma;
+    num outerThresholdMax = threshold - outline + gamma;
 
     if (innerThresholdMin < 0.0) innerThresholdMin = 0.0;
     if (innerThresholdMax > 1.0) innerThresholdMax = 1.0;

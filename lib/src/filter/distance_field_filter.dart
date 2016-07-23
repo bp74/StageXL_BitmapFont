@@ -133,7 +133,6 @@ class DistanceFieldFilterProgram extends RenderProgram {
     num threshold = distanceFieldFilter.config.threshold;
     num softness = distanceFieldFilter.config.softness;
     num scale = math.sqrt(matrix.det);
-
     num gamma = softness / scale;
     num thresholdMin = threshold - gamma;
     num thresholdMax = threshold + gamma;
