@@ -70,4 +70,65 @@ class BitmapFont {
     return kerning != null ? kerning.amount : 0;
   }
 
+  //---------------------------------------------------------------------------
+
+  RenderTextureQuad createRenderTextureQuad(String text) {
+
+    if (this.pages.length != 1) {
+      throw new StateError("Only single page fonts are supported.");
+    }
+
+    int ixOffset = 0;
+    int lastCodeUnit = 0;
+    int x = 0, y = 0, maxX = 0;
+
+    var lineSplit = new RegExp(r"\r\n|\r|\n");
+    var vxData = new List<double>();
+    var ixData = new List<int>();
+
+    for (String line in text.split(lineSplit)) {
+
+      for (int codeUnit in line.codeUnits) {
+
+        var kerning = this.getKerningAmount(lastCodeUnit, codeUnit);
+        var bitmapFontChar = this.getChar(codeUnit);
+        if (bitmapFontChar == null) continue;
+
+        var charQuad = bitmapFontChar.bitmapData.renderTextureQuad;
+        var charVxList = charQuad.vxList;
+        var charIxList = charQuad.ixList;
+
+        for (int i = 0; i < charIxList.length; i++) {
+          ixData.add(ixOffset + charIxList[i]);
+        }
+
+        for (int i = 0; i <= charVxList.length - 4; i += 4) {
+          vxData.add(charVxList[i + 0] + x + kerning);
+          vxData.add(charVxList[i + 1] + y);
+          vxData.add(charVxList[i + 2]);
+          vxData.add(charVxList[i + 3]);
+          ixOffset += 1;
+        }
+
+        x = x + bitmapFontChar.advance + kerning;
+        lastCodeUnit = codeUnit;
+      }
+
+      maxX = x > maxX ? x : maxX;
+      lastCodeUnit = 0;
+      x = 0;
+      y = y + this.common.lineHeight;
+    }
+
+    var bounds = new Rectangle<num>(0, 0, maxX, y);
+    var renderTexture = this.pages[0].bitmapData.renderTexture;
+    var renderTextureQuad = renderTexture.quad.cut(bounds);
+    var vxList = new Float32List.fromList(vxData);
+    var ixList = new Int16List.fromList(ixData);
+    renderTextureQuad.setCustomVertices(vxList, ixList);
+
+    return renderTextureQuad;
+  }
+
+
 }
