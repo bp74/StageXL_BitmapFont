@@ -3,6 +3,11 @@
 This file contains highlights of what changes on each version of the StageXL_BitmapFont
 package. This file is normally updated whenever we push a new version to pub.
 
+#### Pub version 0.2.0
+  * BitmapText extends Bitmap and therefore renders super fast.
+  * BitmapContainerText extends DisplayObjectContainer and is super flexible.
+  * Added DistanceFieldFilters for vector like scaling.
+
 #### Pub version 0.1.1
   * Updated to StageXL 0.13.0
   
