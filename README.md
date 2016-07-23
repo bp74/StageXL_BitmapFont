@@ -13,6 +13,13 @@ __Glyph Designer__ <https://71squared.com/glyphdesigner> (Mac and Windows)
 __BMFont__ <http://www.angelcode.com/products/bmfont> (Windows)  
 __Littera__ <http://kvazars.com/littera> (Online)  
 
+## Examples
+
+http://www.stagexl.org/show/bitmapfont/simple/example.html  
+http://www.stagexl.org/show/bitmapfont/texture_atlas/example.html  
+http://www.stagexl.org/show/bitmapfont/tinting/example.html  
+http://www.stagexl.org/show/bitmapfont/distance_field/example.html  
+
 ## StageXL
 
 The StageXL library is intended for Flash developers who want to migrate 
