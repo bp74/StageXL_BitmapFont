@@ -1,5 +1,13 @@
 part of stagexl_bitmapfont;
 
+/// The [BitmapText] is a standard [Bitmap] display object, which generates a
+/// a custom [BitmapData] object for a given [text].
+///
+/// To achieve this, a [RenderTextureQuad] with custom vertices is generated.
+/// Please be aware that this is very fast with the WebGL renderer, but slow
+/// with the Canvas2D renderer. If you target Canvas2D you should use the
+/// [BitmapContainerText] display object.
+
 class BitmapText extends Bitmap {
 
   final BitmapFont bitmapFont;
