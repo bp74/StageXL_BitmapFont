@@ -34,8 +34,8 @@ class DistanceFieldFilter extends BitmapFilter {
     RenderContextWebGL renderContext = renderState.renderContext;
     RenderTexture renderTexture = renderTextureQuad.renderTexture;
 
-    DistanceFieldFilterProgram renderProgram = renderContext.getRenderProgram(
-        r"$DistanceFieldFilterProgram", () => new DistanceFieldFilterProgram());
+    _DistanceFieldFilterProgram renderProgram = renderContext.getRenderProgram(
+        r"$DistanceFieldFilterProgram", () => new _DistanceFieldFilterProgram());
 
     renderContext.activateRenderProgram(renderProgram);
     renderContext.activateRenderTexture(renderTexture);
@@ -47,7 +47,7 @@ class DistanceFieldFilter extends BitmapFilter {
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-class DistanceFieldFilterProgram extends RenderProgram {
+class _DistanceFieldFilterProgram extends RenderProgram {
 
   // aPosition:   Float32(x), Float32(y)
   // aTexCoord:   Float32(u), Float32(v)
