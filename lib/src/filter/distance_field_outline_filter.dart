@@ -100,11 +100,11 @@ class _DistanceFieldOutlineFilterProgram extends RenderProgram {
     varying vec4 vThreshold;
 
     void main() {
-      float dist = texture2D(uSampler, vTexCoord).a;
-      float innerAlpha = smoothstep(vThreshold.x, vThreshold.y, dist);
-      float outerAlpha = smoothstep(vThreshold.z, vThreshold.w, dist);
-      outerAlpha = max(outerAlpha - innerAlpha, 0.0);
-      gl_FragColor = vInnerColor * innerAlpha + vOuterColor * outerAlpha;
+      vec2 distance = texture2D(uSampler, vTexCoord).aa;
+      vec2 alpha = smoothstep(vThreshold.xz, vThreshold.yw, distance);
+      vec4 innerColor = vInnerColor * alpha.x;
+      vec4 outerColor = vOuterColor * max(alpha.y - alpha.x, 0.0);
+      gl_FragColor = innerColor + outerColor;
     }
     """;
 

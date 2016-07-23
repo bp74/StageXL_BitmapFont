@@ -89,8 +89,8 @@ class _DistanceFieldFilterProgram extends RenderProgram {
     varying vec2 vThreshold;
 
     void main() {
-      float dist = texture2D(uSampler, vTexCoord).a;
-      float alpha = smoothstep(vThreshold.x, vThreshold.y, dist);
+      float distance = texture2D(uSampler, vTexCoord).a;
+      float alpha = smoothstep(vThreshold.x, vThreshold.y, distance);
       gl_FragColor = vInnerColor * alpha;
     }
     """;
