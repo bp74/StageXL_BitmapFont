@@ -63,7 +63,7 @@ Future main() async {
 
   for (int i = 0; i < lines.length; i++) {
     var font = fonts[i % fonts.length];
-    var bitmapText = new BitmapText(font);
+    var bitmapText = new BitmapContainerText(font);
     bitmapText.x = 50;
     bitmapText.y = 50 + i * 64;
     bitmapText.text = lines[i];
@@ -74,7 +74,7 @@ Future main() async {
 
 //-----------------------------------------------------------------------------
 
-Future animateBitmapText(BitmapText bitmapText, Juggler juggler) async {
+Future animateBitmapText(BitmapContainerText bitmapText, Juggler juggler) async {
 
   for (var bitmap in bitmapText.children) {
     bitmap.pivotX = bitmap.width / 2;

@@ -44,23 +44,5 @@ Future main() async {
   bitmapText.text = text;
   bitmapText.addTo(stage);
 
-  animateBitmapText(bitmapText, stage.juggler);
 }
 
-//-----------------------------------------------------------------------------
-
-Future animateBitmapText(BitmapText bitmapText, Juggler juggler) async {
-
-  for (var bitmap in bitmapText.children) {
-    bitmap.pivotX = bitmap.width / 2;
-    bitmap.pivotY = bitmap.height / 2;
-    bitmap.x += bitmap.pivotX;
-    bitmap.y += bitmap.pivotY;
-  }
-
-  await for (var elapsedTime in juggler.onElapsedTimeChange) {
-    for (var bitmap in bitmapText.children) {
-      bitmap.rotation = 0.2 * math.sin(elapsedTime * 8 + bitmap.x);
-    }
-  }
-}

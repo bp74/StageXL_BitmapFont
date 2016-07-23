@@ -36,7 +36,7 @@ Future main() async {
 
   // create BitmapText and add it to the Stage
 
-  var bitmapText = new BitmapText(bitmapFont);
+  var bitmapText = new BitmapContainerText(bitmapFont);
   bitmapText.x = 50;
   bitmapText.y = 50;
   bitmapText.text = text;
@@ -50,7 +50,7 @@ Future main() async {
 
 //-----------------------------------------------------------------------------
 
-void tintBitmapText(BitmapText bitmapText) {
+void tintBitmapText(BitmapContainerText bitmapText) {
 
   var random = new math.Random();
 
@@ -63,7 +63,7 @@ void tintBitmapText(BitmapText bitmapText) {
 
 //-----------------------------------------------------------------------------
 
-Future animateBitmapText(BitmapText bitmapText, Juggler juggler) async {
+Future animateBitmapText(BitmapContainerText bitmapText, Juggler juggler) async {
 
   for (var bitmap in bitmapText.children) {
     bitmap.pivotX = bitmap.width / 2;

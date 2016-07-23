@@ -2,6 +2,7 @@ library stagexl_bitmapfont;
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:typed_data';
 import 'dart:html' show HttpRequest;
 
 import 'package:stagexl/stagexl.dart';
@@ -18,6 +19,7 @@ part 'src/bitmap_font_format/bitmap_font_format_json.dart';
 part 'src/bitmap_font_loader/bitmap_font_loader_bitmap_data.dart';
 part 'src/bitmap_font_loader/bitmap_font_loader_file.dart';
 part 'src/bitmap_font_loader/bitmap_font_loader_texture_atlas.dart';
+part 'src/bitmap_container_text.dart';
 part 'src/bitmap_font.dart';
 part 'src/bitmap_font_format.dart';
 part 'src/bitmap_font_loader.dart';
