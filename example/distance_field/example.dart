@@ -40,10 +40,10 @@ Future main() async {
 
   // add the DistanceFieldFilter for sharp edges
 
-  var config = new DistanceFieldConfig();
+  var config = new DistanceFieldConfig(threshold: 0.50, softness: 0.25);
   var filter1 = new DistanceFieldFilter(config: config);
   var filter2 = new DistanceFieldOutlineFilter(config: config);
-
+  
   var filters = [filter1, filter2];
   var filterIndex = 0;
 

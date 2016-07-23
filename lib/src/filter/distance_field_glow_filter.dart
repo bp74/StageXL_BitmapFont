@@ -1,34 +1,34 @@
 part of stagexl_bitmapfont;
 
-class DistanceFieldOutlineFilter extends BitmapFilter {
+class DistanceFieldGlowFilter extends BitmapFilter {
 
   /// The color inside of the edges.
   int innerColor;
 
   /// The color of the outline.
-  int outlineColor;
+  int glowColor;
 
   /// This configuration of the distance field;
   DistanceFieldConfig config;
 
   //---------------------------------------------------------------------------
 
-  DistanceFieldOutlineFilter({
+  DistanceFieldGlowFilter({
     this.innerColor: Color.White,
-    this.outlineColor: Color.Black,
+    this.glowColor: Color.Black,
     this.config}) {
     this.config ??= new DistanceFieldConfig();
   }
 
-  BitmapFilter clone() => new DistanceFieldOutlineFilter(
+  BitmapFilter clone() => new DistanceFieldGlowFilter(
       innerColor: this.innerColor,
-      outlineColor: this.outlineColor,
+      glowColor: this.glowColor,
       config: this.config.clone());
 
   //---------------------------------------------------------------------------
 
   void apply(BitmapData bitmapData, [Rectangle<num> rectangle]) {
-    // TODO: implement DistanceFieldOutlineFilter for BitmapDatas.
+    // TODO: implement DistanceFieldGlowFilter for BitmapDatas.
   }
 
   //---------------------------------------------------------------------------
@@ -38,15 +38,15 @@ class DistanceFieldOutlineFilter extends BitmapFilter {
 
     RenderContextWebGL renderContext = renderState.renderContext;
     RenderTexture renderTexture = renderTextureQuad.renderTexture;
-    _DistanceFieldOutlineFilterProgram renderProgram;
+    _DistanceFieldGlowFilterProgram renderProgram;
 
     renderProgram = renderContext.getRenderProgram(
-        r"$DistanceFieldOutlineFilterProgram",
-        () => new _DistanceFieldOutlineFilterProgram());
+        r"$DistanceFieldGlowFilterProgram",
+        () => new _DistanceFieldGlowFilterProgram());
 
     renderContext.activateRenderProgram(renderProgram);
     renderContext.activateRenderTexture(renderTexture);
-    renderProgram.renderDistanceFieldOutlineFilterQuad(
+    renderProgram.renderDistanceFieldGlowFilterQuad(
         renderState, renderTextureQuad, this);
   }
 }
@@ -54,7 +54,7 @@ class DistanceFieldOutlineFilter extends BitmapFilter {
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-class _DistanceFieldOutlineFilterProgram extends RenderProgram {
+class _DistanceFieldGlowFilterProgram extends RenderProgram {
 
   // aPosition:   Float32(x), Float32(y)
   // aTexCoord:   Float32(u), Float32(v)
@@ -103,7 +103,8 @@ class _DistanceFieldOutlineFilterProgram extends RenderProgram {
       float dist = texture2D(uSampler, vTexCoord).a;
       float innerAlpha = smoothstep(vThreshold.x, vThreshold.y, dist);
       float outerAlpha = smoothstep(vThreshold.z, vThreshold.w, dist);
-      outerAlpha = max(outerAlpha - innerAlpha, 0.0);
+      float gradientAlpha = smoothstep(vThreshold.z, vThreshold.x, dist);
+      outerAlpha = max(outerAlpha - innerAlpha, 0.0) * gradientAlpha;
       gl_FragColor = vInnerColor * innerAlpha + vOuterColor * outerAlpha;
     }
     """;
@@ -126,10 +127,10 @@ class _DistanceFieldOutlineFilterProgram extends RenderProgram {
 
   //---------------------------------------------------------------------------
 
-  void renderDistanceFieldOutlineFilterQuad(
+  void renderDistanceFieldGlowFilterQuad(
       RenderState renderState,
       RenderTextureQuad renderTextureQuad,
-      DistanceFieldOutlineFilter distanceFieldOutlineFilter) {
+      DistanceFieldGlowFilter distanceFieldGlowFilter) {
 
     var alpha = renderState.globalAlpha;
     var matrix = renderState.globalMatrix;
@@ -140,25 +141,25 @@ class _DistanceFieldOutlineFilterProgram extends RenderProgram {
 
     // setup
 
-    int innerColor = distanceFieldOutlineFilter.innerColor;
+    int innerColor = distanceFieldGlowFilter.innerColor;
     num innerColorA = ((innerColor >> 24) & 0xFF) / 255.0 * alpha;
     num innerColorR = ((innerColor >> 16) & 0xFF) / 255.0;
     num innerColorG = ((innerColor >>  8) & 0xFF) / 255.0;
     num innerColorB = ((innerColor >>  0) & 0xFF) / 255.0;
 
-    int outerColor = distanceFieldOutlineFilter.outlineColor;
+    int outerColor = distanceFieldGlowFilter.glowColor;
     num outerColorA = ((outerColor >> 24) & 0xFF) / 255.0 * alpha;
     num outerColorR = ((outerColor >> 16) & 0xFF) / 255.0;
     num outerColorG = ((outerColor >>  8) & 0xFF) / 255.0;
     num outerColorB = ((outerColor >>  0) & 0xFF) / 255.0;
 
-    num threshold = distanceFieldOutlineFilter.config.threshold;
-    num softness = distanceFieldOutlineFilter.config.softness;
-    num outline = distanceFieldOutlineFilter.config.outline;
+    num threshold = distanceFieldGlowFilter.config.threshold;
+    num softness = distanceFieldGlowFilter.config.softness;
+    num outline = distanceFieldGlowFilter.config.outline;
     num scale = math.sqrt(matrix.det);
     num gamma = softness / scale;
-    num innerThresholdMin = threshold + outline - gamma;
-    num innerThresholdMax = threshold + outline + gamma;
+    num innerThresholdMin = threshold - gamma;
+    num innerThresholdMax = threshold + gamma;
     num outerThresholdMin = threshold - outline - gamma;
     num outerThresholdMax = threshold - outline + gamma;
 

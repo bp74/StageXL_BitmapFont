@@ -11,6 +11,7 @@ import 'package:xml/xml.dart';
 
 part 'src/filter/distance_field_config.dart';
 part 'src/filter/distance_field_filter.dart';
+part 'src/filter/distance_field_glow_filter.dart';
 part 'src/filter/distance_field_outline_filter.dart';
 
 part 'src/bitmap_font/bitmap_font_char.dart';
