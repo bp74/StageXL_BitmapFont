@@ -43,10 +43,10 @@ class DistanceFieldFilter extends BitmapFilter {
 
 class DistanceFieldFilterProgram extends RenderProgram {
 
-  // aPosition:    Float32(x), Float32(y)
-  // aTexCoord:    Float32(u), Float32(v)
-  // aColor:       Float32(r), Float32(g), Float32(b), Float32(a)
-  // aSetup:       Float32(threshold), Float32(gamma)
+  // aPosition:  Float32(x), Float32(y)
+  // aTexCoord:  Float32(u), Float32(v)
+  // aColor:     Float32(r), Float32(g), Float32(b), Float32(a)
+  // aSetup:     Float32(thresholdMin), Float32(thresholdMax)
 
   @override
   String get vertexShaderSource => """
@@ -61,13 +61,11 @@ class DistanceFieldFilterProgram extends RenderProgram {
     varying vec2 vTexCoord;
     varying vec4 vColor;
     varying vec2 vSetup;
-    varying vec2 vBounds;
 
     void main() {
       vTexCoord = aTexCoord;
       vColor = aColor;
       vSetup = aSetup;
-      vBounds = vec2(aSetup.x - aSetup.y, aSetup.x + aSetup.y);
       gl_Position = vec4(aPosition, 0.0, 1.0) * uProjectionMatrix;
     }
     """;
@@ -81,11 +79,10 @@ class DistanceFieldFilterProgram extends RenderProgram {
     varying vec2 vTexCoord;
     varying vec4 vColor;
     varying vec2 vSetup;
-    varying vec2 vBounds;
 
     void main() {
       float dist = texture2D(uSampler, vTexCoord).a;
-      float alpha = smoothstep(vBounds.x, vBounds.y, dist);
+      float alpha = smoothstep(vSetup.x, vSetup.y, dist);
       gl_FragColor = vColor * alpha;
     }
     """;
@@ -127,12 +124,16 @@ class DistanceFieldFilterProgram extends RenderProgram {
     num colorG = ((color >>  8) & 0xFF) / 255.0;
     num colorB = ((color >>  0) & 0xFF) / 255.0;
 
-    var threshold = distanceFieldFilter.threshold;
-    var softness = distanceFieldFilter.softness;
-    var scale = math.sqrt(matrix.det);
+    num threshold = distanceFieldFilter.threshold;
+    num softness = distanceFieldFilter.softness;
+    num scale = math.sqrt(matrix.det);
 
-    var gamma = softness / scale;
-    if (gamma > 0.50) gamma = 0.50;
+    num gamma = softness / scale;
+    num thresholdMin = threshold - gamma;
+    num thresholdMax = threshold + gamma;
+
+    if (thresholdMin < 0.0) thresholdMin = 0.0;
+    if (thresholdMax > 1.0) thresholdMax = 1.0;
 
     // check buffer sizes and flush if necessary
 
@@ -177,8 +178,8 @@ class DistanceFieldFilterProgram extends RenderProgram {
       vxData[vxIndex + 05] = colorG;
       vxData[vxIndex + 06] = colorB;
       vxData[vxIndex + 07] = colorA;
-      vxData[vxIndex + 08] = threshold;
-      vxData[vxIndex + 09] = gamma;
+      vxData[vxIndex + 08] = thresholdMin;
+      vxData[vxIndex + 09] = thresholdMax;
       vxIndex += 10;
     }
 
