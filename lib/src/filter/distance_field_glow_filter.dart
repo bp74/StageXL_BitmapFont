@@ -100,10 +100,13 @@ class _DistanceFieldGlowFilterProgram extends RenderProgram {
     varying vec4 vThreshold;
 
     void main() {
-      vec3 distance = texture2D(uSampler, vTexCoord).aaa;
-      vec3 alpha = smoothstep(vThreshold.xzz, vThreshold.ywx, distance);
+      vec2 distance = texture2D(uSampler, vTexCoord).aa;
+      vec2 alpha = smoothstep(vThreshold.xz, vThreshold.yw, distance);
+      float gradientLength = vThreshold.x - vThreshold.z;
+      float gradientPosition = distance.x - vThreshold.z;
+      float gradient = clamp(gradientPosition / gradientLength, 0.0, 1.0);
       vec4 innerColor = vInnerColor * alpha.x;
-      vec4 outerColor = vOuterColor * max(alpha.y - alpha.x, 0.0) * alpha.z;
+      vec4 outerColor = vOuterColor * max(alpha.y - alpha.x, 0.0) * gradient;
       gl_FragColor = innerColor + outerColor;
     }
     """;
