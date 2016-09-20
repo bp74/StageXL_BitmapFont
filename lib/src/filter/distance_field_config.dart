@@ -13,27 +13,16 @@ class DistanceFieldConfig {
   num threshold;
 
   /// The softness of the edge within the distance field when rendered at
-  /// 100% scale. The softness is applied invers proportional to the scale.
+  /// 100% scale. The softness is applied inverse proportional to the scale.
 
   num softness;
 
-  /// The outline within the distance field.
-  /// Used when rendered with the DistanceFieldOutlineFilter.
-
-  num outline;
-
   //---------------------------------------------------------------------------
 
-  DistanceFieldConfig({
-    this.threshold: 0.5,
-    this.softness: 0.25,
-    this.outline: 0.25
-  });
+  DistanceFieldConfig([this.threshold = 0.5, this.softness = 0.25]);
 
-  DistanceFieldConfig clone() => new DistanceFieldConfig(
-      threshold: this.threshold,
-      softness: this.softness,
-      outline: this.outline
-  );
+  DistanceFieldConfig clone() {
+    return new DistanceFieldConfig(this.threshold, this.softness);
+  }
 
 }

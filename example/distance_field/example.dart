@@ -40,11 +40,18 @@ Future main() async {
 
   // add the DistanceFieldFilter for sharp edges
 
-  var config = new DistanceFieldConfig(threshold: 0.50, softness: 0.25);
-  var filter1 = new DistanceFieldFilter(config: config);
-  var filter2 = new DistanceFieldOutlineFilter(config: config);
-  
-  var filters = [filter1, filter2];
+  var filter1 = new DistanceFieldFilter(
+      innerConfig: new DistanceFieldConfig(0.50, 0.25), innerColor: Color.White);
+
+  var filter2 = new DistanceFieldOutlineFilter(
+      innerConfig: new DistanceFieldConfig(0.70, 0.20), innerColor: Color.White,
+      outerConfig: new DistanceFieldConfig(0.30, 0.20), outerColor: Color.Black);
+
+  var filter3 = new DistanceFieldGlowFilter(
+      innerConfig: new DistanceFieldConfig(0.70, 0.20), innerColor: Color.White,
+      outerConfig: new DistanceFieldConfig(0.30, 0.20), outerColor: 0x80FF0000);
+
+  var filters = [filter1, filter2, filter3];
   var filterIndex = 0;
 
   bitmapText.filters.clear();

@@ -5,25 +5,28 @@ class DistanceFieldGlowFilter extends BitmapFilter {
   /// The color inside of the edges.
   int innerColor;
 
-  /// The color of the outline.
-  int glowColor;
+  /// The color of the glow.
+  int outerColor;
 
-  /// This configuration of the distance field;
-  DistanceFieldConfig config;
+  /// This configuration of the inner distance field;
+  DistanceFieldConfig innerConfig;
+
+  /// This configuration of the outer distance field;
+  DistanceFieldConfig outerConfig;
 
   //---------------------------------------------------------------------------
 
   DistanceFieldGlowFilter({
-    this.innerColor: Color.White,
-    this.glowColor: Color.Black,
-    this.config}) {
-    this.config ??= new DistanceFieldConfig();
+      this.innerConfig, this.innerColor: Color.White,
+      this.outerConfig, this.outerColor: Color.Black}) {
+
+    this.innerConfig ??= new DistanceFieldConfig();
+    this.outerConfig ??= new DistanceFieldConfig();
   }
 
   BitmapFilter clone() => new DistanceFieldGlowFilter(
-      innerColor: this.innerColor,
-      glowColor: this.glowColor,
-      config: this.config.clone());
+      innerConfig: this.innerConfig.clone(), innerColor: this.innerColor,
+      outerConfig: this.outerConfig.clone(), outerColor: this.outerColor);
 
   //---------------------------------------------------------------------------
 
@@ -140,6 +143,7 @@ class _DistanceFieldGlowFilterProgram extends RenderProgram {
     var vxList = renderTextureQuad.vxList;
     var indexCount = ixList.length;
     var vertexCount = vxList.length >> 2;
+    var scale = math.sqrt(matrix.det);
 
     // setup
 
@@ -149,21 +153,21 @@ class _DistanceFieldGlowFilterProgram extends RenderProgram {
     num innerColorG = ((innerColor >>  8) & 0xFF) / 255.0;
     num innerColorB = ((innerColor >>  0) & 0xFF) / 255.0;
 
-    int outerColor = distanceFieldGlowFilter.glowColor;
+    int outerColor = distanceFieldGlowFilter.outerColor;
     num outerColorA = ((outerColor >> 24) & 0xFF) / 255.0 * alpha;
     num outerColorR = ((outerColor >> 16) & 0xFF) / 255.0;
     num outerColorG = ((outerColor >>  8) & 0xFF) / 255.0;
     num outerColorB = ((outerColor >>  0) & 0xFF) / 255.0;
 
-    num threshold = distanceFieldGlowFilter.config.threshold;
-    num softness = distanceFieldGlowFilter.config.softness;
-    num outline = distanceFieldGlowFilter.config.outline;
-    num scale = math.sqrt(matrix.det);
-    num gamma = softness / scale;
-    num innerThresholdMin = threshold - gamma;
-    num innerThresholdMax = threshold + gamma;
-    num outerThresholdMin = threshold - outline - gamma;
-    num outerThresholdMax = threshold - outline + gamma;
+    num innerThreshold = distanceFieldGlowFilter.innerConfig.threshold;
+    num innerSoftness = distanceFieldGlowFilter.innerConfig.softness;
+    num outerThreshold  = distanceFieldGlowFilter.outerConfig.threshold;
+    num outerSoftness = distanceFieldGlowFilter.outerConfig.softness;
+
+    num innerThresholdMin = innerThreshold - innerSoftness / scale;
+    num innerThresholdMax = innerThreshold + innerSoftness / scale;
+    num outerThresholdMin = outerThreshold - outerSoftness / scale;
+    num outerThresholdMax = outerThreshold + outerSoftness / scale;
 
     if (innerThresholdMin < 0.0) innerThresholdMin = 0.0;
     if (innerThresholdMax > 1.0) innerThresholdMax = 1.0;
@@ -229,3 +233,4 @@ class _DistanceFieldGlowFilterProgram extends RenderProgram {
   }
 
 }
+

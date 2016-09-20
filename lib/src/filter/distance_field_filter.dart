@@ -6,19 +6,20 @@ class DistanceFieldFilter extends BitmapFilter {
   int innerColor;
 
   /// This configuration of the distance field;
-  DistanceFieldConfig config;
+  DistanceFieldConfig innerConfig;
 
   //---------------------------------------------------------------------------
 
   DistanceFieldFilter({
-    this.innerColor: Color.White,
-    this.config}) {
-    this.config ??= new DistanceFieldConfig();
+      this.innerConfig,
+      this.innerColor: Color.White}) {
+
+    this.innerConfig ??= new DistanceFieldConfig();
   }
 
   BitmapFilter clone() => new DistanceFieldFilter(
       innerColor: this.innerColor,
-      config: this.config.clone());
+      innerConfig: this.innerConfig.clone());
 
   //---------------------------------------------------------------------------
 
@@ -123,6 +124,7 @@ class _DistanceFieldFilterProgram extends RenderProgram {
     var vxList = renderTextureQuad.vxList;
     var indexCount = ixList.length;
     var vertexCount = vxList.length >> 2;
+    var scale = math.sqrt(matrix.det);
 
     // setup
 
@@ -132,12 +134,11 @@ class _DistanceFieldFilterProgram extends RenderProgram {
     num colorG = ((color >>  8) & 0xFF) / 255.0;
     num colorB = ((color >>  0) & 0xFF) / 255.0;
 
-    num threshold = distanceFieldFilter.config.threshold;
-    num softness = distanceFieldFilter.config.softness;
-    num scale = math.sqrt(matrix.det);
-    num gamma = softness / scale;
-    num thresholdMin = threshold - gamma;
-    num thresholdMax = threshold + gamma;
+    num innerThreshold = distanceFieldFilter.innerConfig.threshold;
+    num innerSoftness = distanceFieldFilter.innerConfig.softness;
+
+    num thresholdMin = innerThreshold - innerSoftness / scale;
+    num thresholdMax = innerThreshold + innerSoftness / scale;
 
     if (thresholdMin < 0.0) thresholdMin = 0.0;
     if (thresholdMax > 1.0) thresholdMax = 1.0;
