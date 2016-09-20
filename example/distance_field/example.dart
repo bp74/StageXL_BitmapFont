@@ -40,16 +40,16 @@ Future main() async {
 
   // add the DistanceFieldFilter for sharp edges
 
-  var filter1 = new DistanceFieldFilter(
-      innerConfig: new DistanceFieldConfig(0.50, 0.25), innerColor: Color.White);
+  var config1 = new DistanceFieldConfig(0.50, 0.25, Color.White);
+  var filter1 = new DistanceFieldFilter(config1);
 
-  var filter2 = new DistanceFieldOutlineFilter(
-      innerConfig: new DistanceFieldConfig(0.70, 0.20), innerColor: Color.White,
-      outerConfig: new DistanceFieldConfig(0.30, 0.20), outerColor: Color.Black);
+  var config2 = new DistanceFieldConfig(0.70, 0.20, Color.White);
+  var config3 = new DistanceFieldConfig(0.30, 0.20, Color.Black);
+  var filter2 = new DistanceFieldOutlineFilter(config2, config3);
 
-  var filter3 = new DistanceFieldGlowFilter(
-      innerConfig: new DistanceFieldConfig(0.70, 0.20), innerColor: Color.White,
-      outerConfig: new DistanceFieldConfig(0.30, 0.20), outerColor: 0x80FF0000);
+  var config4 = new DistanceFieldConfig(0.70, 0.20, Color.White);
+  var config5 = new DistanceFieldConfig(0.30, 0.20, 0x80FF0000);
+  var filter3 = new DistanceFieldGlowFilter(config4, config5);
 
   var filters = [filter1, filter2, filter3];
   var filterIndex = 0;

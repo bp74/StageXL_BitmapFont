@@ -17,12 +17,17 @@ class DistanceFieldConfig {
 
   num softness;
 
+  /// The color that should be applied to the inside of distance field.
+
+  int color;
+
   //---------------------------------------------------------------------------
 
-  DistanceFieldConfig([this.threshold = 0.5, this.softness = 0.25]);
+  DistanceFieldConfig([
+      this.threshold = 0.5, this.softness = 0.25, this.color = Color.White]);
 
   DistanceFieldConfig clone() {
-    return new DistanceFieldConfig(this.threshold, this.softness);
+    return new DistanceFieldConfig(this.threshold, this.softness, this.color);
   }
 
 }

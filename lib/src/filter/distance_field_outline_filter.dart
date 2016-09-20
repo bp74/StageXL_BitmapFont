@@ -2,12 +2,6 @@ part of stagexl_bitmapfont;
 
 class DistanceFieldOutlineFilter extends BitmapFilter {
 
-  /// The color inside of the edges.
-  int innerColor;
-
-  /// The color of the outline.
-  int outerColor;
-
   /// This configuration of the inner distance field;
   DistanceFieldConfig innerConfig;
 
@@ -16,17 +10,13 @@ class DistanceFieldOutlineFilter extends BitmapFilter {
 
   //---------------------------------------------------------------------------
 
-  DistanceFieldOutlineFilter({
-      this.innerConfig, this.innerColor: Color.White,
-      this.outerConfig, this.outerColor: Color.Black}) {
+  DistanceFieldOutlineFilter(this.innerConfig, this.outerConfig);
 
-    this.innerConfig ??= new DistanceFieldConfig();
-    this.outerConfig ??= new DistanceFieldConfig();
+  BitmapFilter clone() {
+    var innerConfig = this.innerConfig.clone();
+    var outerConfig = this.outerConfig.clone();
+    return new DistanceFieldOutlineFilter(innerConfig, outerConfig);
   }
-
-  BitmapFilter clone() => new DistanceFieldOutlineFilter(
-      innerConfig: this.innerConfig.clone(), innerColor: this.innerColor,
-      outerConfig: this.outerConfig.clone(), outerColor: this.outerColor);
 
   //---------------------------------------------------------------------------
 
@@ -144,30 +134,23 @@ class _DistanceFieldOutlineFilterProgram extends RenderProgram {
 
     // setup
 
-    int innerColor = distanceFieldOutlineFilter.innerColor;
-    num innerColorA = ((innerColor >> 24) & 0xFF) / 255.0 * alpha;
-    num innerColorR = ((innerColor >> 16) & 0xFF) / 255.0;
-    num innerColorG = ((innerColor >>  8) & 0xFF) / 255.0;
-    num innerColorB = ((innerColor >>  0) & 0xFF) / 255.0;
-
-    int outerColor = distanceFieldOutlineFilter.outerColor;
-    num outerColorA = ((outerColor >> 24) & 0xFF) / 255.0 * alpha;
-    num outerColorR = ((outerColor >> 16) & 0xFF) / 255.0;
-    num outerColorG = ((outerColor >>  8) & 0xFF) / 255.0;
-    num outerColorB = ((outerColor >>  0) & 0xFF) / 255.0;
-
-    num innerThreshold = distanceFieldOutlineFilter.innerConfig.threshold;
-    num innerSoftness = distanceFieldOutlineFilter.innerConfig.softness;
-    num outerThreshold = distanceFieldOutlineFilter.outerConfig.threshold;
-    num outerSoftness = distanceFieldOutlineFilter.outerConfig.softness;
-
-    num innerThresholdMin = innerThreshold - innerSoftness / scale;
-    num innerThresholdMax = innerThreshold + innerSoftness / scale;
-    num outerThresholdMin = outerThreshold - outerSoftness / scale;
-    num outerThresholdMax = outerThreshold + outerSoftness / scale;
-
+    var inner = distanceFieldOutlineFilter.innerConfig;
+    var innerColorA = ((inner.color >> 24) & 0xFF) / 255.0 * alpha;
+    var innerColorR = ((inner.color >> 16) & 0xFF) / 255.0;
+    var innerColorG = ((inner.color >>  8) & 0xFF) / 255.0;
+    var innerColorB = ((inner.color >>  0) & 0xFF) / 255.0;
+    var innerThresholdMin = inner.threshold - inner.softness / scale;
+    var innerThresholdMax = inner.threshold + inner.softness / scale;
     if (innerThresholdMin < 0.0) innerThresholdMin = 0.0;
     if (innerThresholdMax > 1.0) innerThresholdMax = 1.0;
+
+    var outer = distanceFieldOutlineFilter.outerConfig;
+    var outerColorA = ((outer.color >> 24) & 0xFF) / 255.0 * alpha;
+    var outerColorR = ((outer.color >> 16) & 0xFF) / 255.0;
+    var outerColorG = ((outer.color >>  8) & 0xFF) / 255.0;
+    var outerColorB = ((outer.color >>  0) & 0xFF) / 255.0;
+    var outerThresholdMin = outer.threshold - outer.softness / scale;
+    var outerThresholdMax = outer.threshold + outer.softness / scale;
     if (outerThresholdMin < 0.0) outerThresholdMin = 0.0;
     if (outerThresholdMax > 1.0) outerThresholdMax = 1.0;
 

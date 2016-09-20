@@ -2,24 +2,17 @@ part of stagexl_bitmapfont;
 
 class DistanceFieldFilter extends BitmapFilter {
 
-  /// The color inside of the edges.
-  int innerColor;
-
   /// This configuration of the distance field;
   DistanceFieldConfig innerConfig;
 
   //---------------------------------------------------------------------------
 
-  DistanceFieldFilter({
-      this.innerConfig,
-      this.innerColor: Color.White}) {
+  DistanceFieldFilter(this.innerConfig);
 
-    this.innerConfig ??= new DistanceFieldConfig();
+  BitmapFilter clone() {
+    var innerConfig = this.innerConfig.clone();
+    return new DistanceFieldFilter(innerConfig);
   }
-
-  BitmapFilter clone() => new DistanceFieldFilter(
-      innerColor: this.innerColor,
-      innerConfig: this.innerConfig.clone());
 
   //---------------------------------------------------------------------------
 
@@ -128,20 +121,15 @@ class _DistanceFieldFilterProgram extends RenderProgram {
 
     // setup
 
-    int color = distanceFieldFilter.innerColor;
-    num colorA = ((color >> 24) & 0xFF) / 255.0 * alpha;
-    num colorR = ((color >> 16) & 0xFF) / 255.0;
-    num colorG = ((color >>  8) & 0xFF) / 255.0;
-    num colorB = ((color >>  0) & 0xFF) / 255.0;
-
-    num innerThreshold = distanceFieldFilter.innerConfig.threshold;
-    num innerSoftness = distanceFieldFilter.innerConfig.softness;
-
-    num thresholdMin = innerThreshold - innerSoftness / scale;
-    num thresholdMax = innerThreshold + innerSoftness / scale;
-
-    if (thresholdMin < 0.0) thresholdMin = 0.0;
-    if (thresholdMax > 1.0) thresholdMax = 1.0;
+    var inner = distanceFieldFilter.innerConfig;
+    var innerColorA = ((inner.color >> 24) & 0xFF) / 255.0 * alpha;
+    var innerColorR = ((inner.color >> 16) & 0xFF) / 255.0;
+    var innerColorG = ((inner.color >>  8) & 0xFF) / 255.0;
+    var innerColorB = ((inner.color >>  0) & 0xFF) / 255.0;
+    var innerThresholdMin = inner.threshold - inner.softness / scale;
+    var innerThresholdMax = inner.threshold + inner.softness / scale;
+    if (innerThresholdMin < 0.0) innerThresholdMin = 0.0;
+    if (innerThresholdMax > 1.0) innerThresholdMax = 1.0;
 
     // check buffer sizes and flush if necessary
 
@@ -182,12 +170,12 @@ class _DistanceFieldFilterProgram extends RenderProgram {
       vxData[vxIndex + 01] = my + mb * x + md * y;
       vxData[vxIndex + 02] = vxList[o + 2];
       vxData[vxIndex + 03] = vxList[o + 3];
-      vxData[vxIndex + 04] = colorR;
-      vxData[vxIndex + 05] = colorG;
-      vxData[vxIndex + 06] = colorB;
-      vxData[vxIndex + 07] = colorA;
-      vxData[vxIndex + 08] = thresholdMin;
-      vxData[vxIndex + 09] = thresholdMax;
+      vxData[vxIndex + 04] = innerColorR;
+      vxData[vxIndex + 05] = innerColorG;
+      vxData[vxIndex + 06] = innerColorB;
+      vxData[vxIndex + 07] = innerColorA;
+      vxData[vxIndex + 08] = innerThresholdMin;
+      vxData[vxIndex + 09] = innerThresholdMax;
       vxIndex += 10;
     }
 
