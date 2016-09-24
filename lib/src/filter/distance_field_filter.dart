@@ -3,15 +3,15 @@ part of stagexl_bitmapfont;
 class DistanceFieldFilter extends BitmapFilter {
 
   /// This configuration of the distance field;
-  DistanceFieldConfig innerConfig;
+  DistanceFieldConfig config;
 
   //---------------------------------------------------------------------------
 
-  DistanceFieldFilter(this.innerConfig);
+  DistanceFieldFilter(this.config);
 
   BitmapFilter clone() {
-    var innerConfig = this.innerConfig.clone();
-    return new DistanceFieldFilter(innerConfig);
+    var config = this.config.clone();
+    return new DistanceFieldFilter(config);
   }
 
   //---------------------------------------------------------------------------
@@ -36,7 +36,7 @@ class DistanceFieldFilter extends BitmapFilter {
     renderContext.activateRenderProgram(renderProgram);
     renderContext.activateRenderTexture(renderTexture);
     renderProgram.renderDistanceFieldFilterQuad(
-        renderState, renderTextureQuad, this.innerConfig);
+        renderState, renderTextureQuad, this.config);
   }
 }
 

@@ -2,8 +2,8 @@ part of stagexl_bitmapfont;
 
 class DistanceFieldShadowFilter extends BitmapFilter {
 
-  /// This configuration of the inner distance field
-  DistanceFieldConfig innerConfig;
+  /// This configuration of the front distance field
+  DistanceFieldConfig frontConfig;
 
   /// This configuration of the shadow distance field
   DistanceFieldConfig shadowConfig;
@@ -17,13 +17,13 @@ class DistanceFieldShadowFilter extends BitmapFilter {
   //---------------------------------------------------------------------------
 
   DistanceFieldShadowFilter(
-      this.innerConfig, this.shadowConfig, this.offsetX, this.offsetY);
+      this.frontConfig, this.shadowConfig, this.offsetX, this.offsetY);
 
   BitmapFilter clone() {
-    var innerConfig = this.innerConfig.clone();
+    var frontConfig = this.frontConfig.clone();
     var shadowConfig = this.shadowConfig.clone();
     return new DistanceFieldShadowFilter(
-        innerConfig, shadowConfig, this.offsetX, this.offsetY);
+        frontConfig, shadowConfig, this.offsetX, this.offsetY);
   }
 
   //---------------------------------------------------------------------------
@@ -54,6 +54,6 @@ class DistanceFieldShadowFilter extends BitmapFilter {
 
     renderState.globalMatrix.prependTranslation(-offsetX, -offsetY);
     renderProgram.renderDistanceFieldFilterQuad(
-        renderState, renderTextureQuad, this.innerConfig);
+        renderState, renderTextureQuad, this.frontConfig);
   }
 }
