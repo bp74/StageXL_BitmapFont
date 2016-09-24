@@ -48,10 +48,14 @@ Future main() async {
   var filter2 = new DistanceFieldOutlineFilter(config2, config3);
 
   var config4 = new DistanceFieldConfig(0.70, 0.20, Color.White);
-  var config5 = new DistanceFieldConfig(0.30, 0.20, 0x80FF0000);
+  var config5 = new DistanceFieldConfig(0.10, 0.10, 0x80FF0000);
   var filter3 = new DistanceFieldGlowFilter(config4, config5);
 
-  var filters = [filter1, filter2, filter3];
+  var config6 = new DistanceFieldConfig(0.50, 0.20, Color.White);
+  var config7 = new DistanceFieldConfig(0.50, 0.50, Color.Black);
+  var filter4 = new DistanceFieldShadowFilter(config6, config7, 3, 3);
+
+  var filters = [filter1, filter2, filter3, filter4];
   var filterIndex = 0;
 
   bitmapText.filters.clear();
