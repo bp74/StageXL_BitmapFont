@@ -3,6 +3,9 @@
 This file contains highlights of what changes on each version of the StageXL_BitmapFont
 package. This file is normally updated whenever we push a new version to pub.
 
+#### Pub version 0.3.1
+  * Raised dependency to StageXL 1.0.0
+
 #### Pub version 0.3.0
   * Added DistanceFieldShadowFilter
   * Changed DistanceFieldConfig
