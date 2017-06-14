@@ -18,6 +18,8 @@ class BitmapFont {
   /// e.g. some characters should be placed closer to each other than others.
   final List<BitmapFontKerning> kernings;
 
+  static num divisor = 1;
+
   BitmapFont(this.info, this.common, this.pages, this.chars, this.kernings);
 
   //---------------------------------------------------------------------------

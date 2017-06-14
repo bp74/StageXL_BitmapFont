@@ -76,7 +76,7 @@ class _BitmapFontFormatFnt extends BitmapFontFormat {
         var height = _getInt(argsMap, "height", 0);
         var xOffset = _getInt(argsMap, "xoffset", 0);
         var yOffset = _getInt(argsMap, "yoffset", 0);
-        var advance = _getInt(argsMap, "xadvance", 0);
+        var advance = _getInt(argsMap, "xadvance", 0) ~/ BitmapFont.divisor;
         var pageId = _getInt(argsMap, "page", 0);
         var colorChannel = _getInt(argsMap, "chnl", 0);
         var letter = _getString(argsMap, "letter", "");
