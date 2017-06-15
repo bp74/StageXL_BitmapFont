@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:html' as html;
-import 'dart:math' as math;
 import 'package:stagexl/stagexl.dart';
 import 'package:stagexl_bitmapfont/stagexl_bitmapfont.dart';
 
@@ -17,10 +16,8 @@ Future main() async {
   StageXL.stageOptions.renderEngine = RenderEngine.WebGL;
   StageXL.stageOptions.backgroundColor = Color.DarkSlateGray;
   StageXL.stageOptions.stageScaleMode = StageScaleMode.NO_SCALE;
-
-  //  StageXL.bitmapDataLoadOptions.pixelRatios = <double>[1.0, 2.0, 3.0];
-
-  StageXL.bitmapDataLoadOptions.pixelRatios = <double>[3.0];
+  StageXL.bitmapDataLoadOptions.pixelRatios = <double>[1.0, 2.0, 3.0];
+  StageXL.bitmapDataLoadOptions.pixelRatios = <double>[1.0];
 
   // Init Stage and RenderLoop
 
@@ -31,8 +28,7 @@ Future main() async {
 
   // load BitmapFont
 
-  var fontUrl = "font/font@1x.fnt";
-  var bitmapFont = await BitmapFont.load(fontUrl);
+  var bitmapFont = await BitmapFont.load("font/font@1x.fnt");
 
   // create BitmapText and add it to the Stage
 
@@ -41,6 +37,4 @@ Future main() async {
   bitmapText.y = 50;
   bitmapText.text = text;
   bitmapText.addTo(stage);
-
 }
-
