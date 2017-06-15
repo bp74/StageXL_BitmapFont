@@ -9,28 +9,11 @@ class _BitmapFontLoaderFile extends BitmapFontLoader {
   _BitmapFontLoaderFile(String sourceUrl, BitmapDataLoadOptions options) {
 
     options = options ?? BitmapData.defaultLoadOptions;
+    var fileInfo = new BitmapDataLoadInfo(sourceUrl, options.pixelRatios);
 
-    this.sourceUrl = sourceUrl;
+    this.sourceUrl = fileInfo.loaderUrl;
+    this.pixelRatio = fileInfo.pixelRatio;
     this.bitmapDataLoadOptions = options;
-    this.pixelRatio = 1.0;
-
-    var pixelRatioRegexp = new RegExp(r"@(\d+(.\d+)?)x");
-    var pixelRatioMatch = pixelRatioRegexp.firstMatch(sourceUrl);
-
-    if (pixelRatioMatch != null) {
-      var match = pixelRatioMatch;
-      var originPixelRatioFractions = (match.group(2) ?? ".").length - 1;
-      var originPixelRatio = double.parse(match.group(1));
-      var devicePixelRatio = StageXL.environment.devicePixelRatio;
-      var loaderPixelRatio = options.pixelRatios.fold<num>(0.0, (num a, num b) {
-        var aDelta = (a - devicePixelRatio).abs();
-        var bDelta = (b - devicePixelRatio).abs();
-        return aDelta < bDelta && a > 0.0 ? a : b;
-      });
-      var name = loaderPixelRatio.toStringAsFixed(originPixelRatioFractions);
-      this.sourceUrl = sourceUrl.replaceRange(match.start + 1, match.end - 1, name);
-      this.pixelRatio = loaderPixelRatio / originPixelRatio;
-    }
   }
 
   //----------------------------------------------------------------------------
