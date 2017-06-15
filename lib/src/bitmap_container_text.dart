@@ -16,25 +16,29 @@ class BitmapContainerText extends DisplayObjectContainer {
     this.removeChildren();
     _text = value;
 
-    int x = 0, y = 0, lastCodeUnit = 0;
-    RegExp lineSplit = new RegExp(r"\r\n|\r|\n");
+    var x = 0.0;
+    var y = 0.0;
+    var scale = 1.0 / this.bitmapFont.pixelRatio;
+    var lastCodeUnit = 0;
+
+    var lineSplit = new RegExp(r"\r\n|\r|\n");
 
     for(String line in value.split(lineSplit)) {
       for(int codeUnit in line.codeUnits) {
-        var kerning = bitmapFont.getKerningAmount(lastCodeUnit, codeUnit);
         var bitmapFontChar = bitmapFont.getChar(codeUnit);
         if (bitmapFontChar != null) {
+          x += scale * bitmapFont.getKerningAmount(lastCodeUnit, codeUnit);
           var bitmap = new Bitmap(bitmapFontChar.bitmapData);
-          bitmap.x = x + kerning;
+          bitmap.x = x;
           bitmap.y = y;
           bitmap.addTo(this);
-          x = x + bitmapFontChar.advance + kerning;
+          x += scale * bitmapFontChar.advance;
           lastCodeUnit = codeUnit;
         }
       }
       lastCodeUnit = 0;
-      x = 0;
-      y = y + bitmapFont.common.lineHeight;
+      x = 0.0;
+      y = y + scale * bitmapFont.common.lineHeight;
     }
   }
 

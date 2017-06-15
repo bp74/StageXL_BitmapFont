@@ -8,10 +8,13 @@ class _BitmapFontLoaderTextureAtlas extends BitmapFontLoader {
 
   _BitmapFontLoaderTextureAtlas(this.textureAtlas, this.namePrefix, this.source);
 
+  //----------------------------------------------------------------------------
+
   @override
-  Future<String> getSource() {
-    return new Future.value(this.source);
-  }
+  double getPixelRatio() => 1.0;
+
+  @override
+  Future<String> getSource() => new Future.value(this.source);
 
   @override
   Future<BitmapData> getBitmapData(int id, String filename) {
