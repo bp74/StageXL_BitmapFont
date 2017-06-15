@@ -70,21 +70,27 @@ class _BitmapFontFormatFnt extends BitmapFontFormat {
       } else if (chunk == "char") {
 
         var id = _getInt(argsMap, "id", 0);
-        var x = _getInt(argsMap, "x", 0);
-        var y = _getInt(argsMap, "y", 0);
-        var width = _getInt(argsMap, "width", 0);
-        var height = _getInt(argsMap, "height", 0);
-        var xOffset = _getInt(argsMap, "xoffset", 0);
-        var yOffset = _getInt(argsMap, "yoffset", 0);
-        var advance = _getInt(argsMap, "xadvance", 0);
         var pageId = _getInt(argsMap, "page", 0);
+        var advance = _getInt(argsMap, "xadvance", 0);
         var colorChannel = _getInt(argsMap, "chnl", 0);
         var letter = _getString(argsMap, "letter", "");
 
+        var page = pages.firstWhere((p) => p.id == pageId);
+        var pageRenderTextureQuad = page.bitmapData.renderTextureQuad;
+        var pixelRatio = pageRenderTextureQuad.pixelRatio;
+
+        var x = (pixelRatio * _getInt(argsMap, "x", 0)).round();
+        var y = (pixelRatio * _getInt(argsMap, "y", 0)).round();
+        var width = (pixelRatio * _getInt(argsMap, "width", 0)).round();
+        var height = (pixelRatio * _getInt(argsMap, "height", 0)).round();
+        var xOffset = (pixelRatio * _getInt(argsMap, "xoffset", 0)).round();
+        var yOffset = (pixelRatio * _getInt(argsMap, "yoffset", 0)).round();
+        var lineHeight = (pixelRatio * common.lineHeight).round();
+
         var renderTextureQuad = new RenderTextureQuad.slice(
-            pages.firstWhere((p) => p.id == pageId).bitmapData.renderTextureQuad,
+            pageRenderTextureQuad,
             new Rectangle<int>(x, y, width, height),
-            new Rectangle<int>(-xOffset, -yOffset, width, common.lineHeight));
+            new Rectangle<int>(-xOffset, -yOffset, width, lineHeight));
 
         var bitmapData = new BitmapData.fromRenderTextureQuad(renderTextureQuad);
         chars.add(new BitmapFontChar(id, bitmapData, advance, colorChannel, letter));
