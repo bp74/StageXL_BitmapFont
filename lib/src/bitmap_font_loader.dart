@@ -12,4 +12,7 @@ abstract class BitmapFontLoader {
 
   /// Get the BitmapData for a bitmap font page.
   Future<BitmapData> getBitmapData(int id, String filename);
+
+  /// Get the pixel ratio of the font that is loaded.
+  double getPixelRatio();
 }

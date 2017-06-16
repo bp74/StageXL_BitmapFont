@@ -7,8 +7,9 @@ class _BitmapFontFormatJson extends BitmapFontFormat {
   Future<BitmapFont> load(BitmapFontLoader bitmapFontLoader) async {
 
     var source = await bitmapFontLoader.getSource();
-    var data = JSON.decode(source);
+    var pixelRatio = bitmapFontLoader.getPixelRatio();
 
+    var data = JSON.decode(source);
     var infoPaddings = _getString(data, "padding", "0,0,0,0").split(",");
     var infoSpacings = _getString(data, "spacing", "0,0").split(",");
 
@@ -84,7 +85,7 @@ class _BitmapFontFormatJson extends BitmapFontFormat {
       return new BitmapFontKerning(first, second, amount);
     }).toList();
 
-    return new BitmapFont(info, common, pages, chars, kernings);
+    return new BitmapFont(info, common, pages, chars, kernings, pixelRatio);
   }
 
   //---------------------------------------------------------------------------

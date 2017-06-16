@@ -18,9 +18,9 @@ class BitmapFont {
   /// e.g. some characters should be placed closer to each other than others.
   final List<BitmapFontKerning> kernings;
 
-  static num divisor = 1;
+  final double pixelRatio;
 
-  BitmapFont(this.info, this.common, this.pages, this.chars, this.kernings);
+  BitmapFont(this.info, this.common, this.pages, this.chars, this.kernings, this.pixelRatio);
 
   //---------------------------------------------------------------------------
 
@@ -80,9 +80,13 @@ class BitmapFont {
       throw new StateError("Not supported for multi page bitmap fonts.");
     }
 
-    int ixOffset = 0;
-    int lastCodeUnit = 0;
-    int x = 0, y = 0, maxX = 0;
+    var ixOffset = 0;
+    var lastCodeUnit = 0;
+
+    var scale = 1.0 / this.pixelRatio;
+    var maxX = 0.0;
+    var x = 0.0;
+    var y = 0.0;
 
     var lineSplit = new RegExp(r"\r\n|\r|\n");
     var vxData = new List<double>();
@@ -92,7 +96,8 @@ class BitmapFont {
 
       for (int codeUnit in line.codeUnits) {
 
-        var kerning = this.getKerningAmount(lastCodeUnit, codeUnit);
+        x += scale * this.getKerningAmount(lastCodeUnit, codeUnit);
+
         var bitmapFontChar = this.getChar(codeUnit);
         if (bitmapFontChar == null) continue;
 
@@ -105,21 +110,21 @@ class BitmapFont {
         }
 
         for (int i = 0; i <= charVxList.length - 4; i += 4) {
-          vxData.add(charVxList[i + 0] + x + kerning);
+          vxData.add(charVxList[i + 0] + x);
           vxData.add(charVxList[i + 1] + y);
           vxData.add(charVxList[i + 2]);
           vxData.add(charVxList[i + 3]);
           ixOffset += 1;
         }
 
-        x = x + bitmapFontChar.advance + kerning;
+        x += scale * bitmapFontChar.advance;
         lastCodeUnit = codeUnit;
       }
 
       maxX = x > maxX ? x : maxX;
       lastCodeUnit = 0;
-      x = 0;
-      y = y + this.common.lineHeight;
+      x = 0.0;
+      y = y + scale * this.common.lineHeight;
     }
 
     var bounds = new Rectangle<num>(0, 0, maxX, y);
@@ -131,6 +136,4 @@ class BitmapFont {
 
     return renderTextureQuad;
   }
-
-
 }

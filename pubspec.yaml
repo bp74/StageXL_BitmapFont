@@ -10,8 +10,7 @@ environment:
 dependencies:
   xml: any
   browser: any
-  stagexl:
-    git: https://github.com/mnordine/StageXL
+  stagexl: '^1.2.0'
 
 transformers:
 - $dart2js:

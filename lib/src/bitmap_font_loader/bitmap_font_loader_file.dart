@@ -2,21 +2,31 @@ part of stagexl_bitmapfont;
 
 class _BitmapFontLoaderFile extends BitmapFontLoader {
 
-  final String sourceUrl;
-  final BitmapDataLoadOptions bitmapDataLoadOptions;
+  BitmapDataLoadOptions _loadOptions;
+  BitmapDataLoadInfo _loadInfo;
 
-  _BitmapFontLoaderFile(this.sourceUrl, this.bitmapDataLoadOptions);
-
-  @override
-  Future<String> getSource() {
-    return HttpRequest.getString(this.sourceUrl);
+  _BitmapFontLoaderFile(String sourceUrl, BitmapDataLoadOptions options) {
+    _loadOptions = options ?? BitmapData.defaultLoadOptions;
+    _loadInfo = new BitmapDataLoadInfo(sourceUrl, _loadOptions.pixelRatios);
   }
 
+  //----------------------------------------------------------------------------
+
   @override
-  Future<BitmapData> getBitmapData(int id, String filename) {
+  double getPixelRatio() => _loadInfo.pixelRatio;
+
+  @override
+  Future<String> getSource() => HttpRequest.getString(_loadInfo.loaderUrl);
+
+  @override
+  Future<BitmapData> getBitmapData(int id, String filename) async {
+    var loaderUrl = _loadInfo.loaderUrl;
+    var pixelRatio = _loadInfo.pixelRatio;
     var regex = new RegExp(r"^(.*/)?(?:$|(.+?)(?:(\.[^.]*$)|$))");
-    var path = regex.firstMatch(this.sourceUrl).group(1);
+    var path = regex.firstMatch(loaderUrl).group(1);
     var imageUrl = path == null ? filename : "$path$filename";
-    return BitmapData.load(imageUrl, this.bitmapDataLoadOptions);
+    var bitmap = await BitmapData.load(imageUrl, _loadOptions);
+    var renderTextureQuad = bitmap.renderTextureQuad.withPixelRatio(pixelRatio);
+    return new BitmapData.fromRenderTextureQuad(renderTextureQuad);
   }
 }

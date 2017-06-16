@@ -7,6 +7,8 @@ class _BitmapFontFormatXml extends BitmapFontFormat {
   Future<BitmapFont> load(BitmapFontLoader bitmapFontLoader) async {
 
     var source = await bitmapFontLoader.getSource();
+    var pixelRatio = bitmapFontLoader.getPixelRatio();
+
     var xml = parse(source);
     var fontXml = xml.findElements("font").first;
     var infoXml = fontXml.findElements("info").first;
@@ -88,7 +90,7 @@ class _BitmapFontFormatXml extends BitmapFontFormat {
       return new BitmapFontKerning(first, second, amount);
     }).toList();
 
-    return new BitmapFont(info, common, pages, chars, kernings);
+    return new BitmapFont(info, common, pages, chars, kernings, pixelRatio);
   }
 
   //---------------------------------------------------------------------------
