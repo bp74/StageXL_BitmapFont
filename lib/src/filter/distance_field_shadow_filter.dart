@@ -19,6 +19,7 @@ class DistanceFieldShadowFilter extends BitmapFilter {
   DistanceFieldShadowFilter(
       this.frontConfig, this.shadowConfig, this.offsetX, this.offsetY);
 
+  @override
   BitmapFilter clone() {
     var frontConfig = this.frontConfig.clone();
     var shadowConfig = this.shadowConfig.clone();
@@ -28,12 +29,14 @@ class DistanceFieldShadowFilter extends BitmapFilter {
 
   //---------------------------------------------------------------------------
 
+  @override
   void apply(BitmapData bitmapData, [Rectangle<num> rectangle]) {
     // TODO: implement DistanceFieldFilter for BitmapDatas.
   }
 
   //---------------------------------------------------------------------------
 
+  @override
   void renderFilter(
       RenderState renderState, RenderTextureQuad renderTextureQuad, int pass) {
 

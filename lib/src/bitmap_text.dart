@@ -23,7 +23,7 @@ class BitmapText extends Bitmap {
 
   String get text => _text;
 
-  void set text(String value) {
+  set text(String value) {
     _text = value;
     if (value == "") {
       this.bitmapData = null;

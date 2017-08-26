@@ -4,6 +4,7 @@ class _BitmapFontFormatXml extends BitmapFontFormat {
 
   const _BitmapFontFormatXml();
 
+  @override
   Future<BitmapFont> load(BitmapFontLoader bitmapFontLoader) async {
 
     var source = await bitmapFontLoader.getSource();

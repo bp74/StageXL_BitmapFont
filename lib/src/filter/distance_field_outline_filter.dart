@@ -12,6 +12,7 @@ class DistanceFieldOutlineFilter extends BitmapFilter {
 
   DistanceFieldOutlineFilter(this.innerConfig, this.outerConfig);
 
+  @override
   BitmapFilter clone() {
     var innerConfig = this.innerConfig.clone();
     var outerConfig = this.outerConfig.clone();
@@ -20,12 +21,14 @@ class DistanceFieldOutlineFilter extends BitmapFilter {
 
   //---------------------------------------------------------------------------
 
+  @override
   void apply(BitmapData bitmapData, [Rectangle<num> rectangle]) {
     // TODO: implement DistanceFieldOutlineFilter for BitmapDatas.
   }
 
   //---------------------------------------------------------------------------
 
+  @override
   void renderFilter(
       RenderState renderState, RenderTextureQuad renderTextureQuad, int pass) {
 

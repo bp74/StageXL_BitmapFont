@@ -4,6 +4,7 @@ class _BitmapFontFormatFnt extends BitmapFontFormat {
 
   const _BitmapFontFormatFnt();
 
+  @override
   Future<BitmapFont> load(BitmapFontLoader bitmapFontLoader) async {
 
     var source = await bitmapFontLoader.getSource();
@@ -13,8 +14,8 @@ class _BitmapFontFormatFnt extends BitmapFontFormat {
     var lineRegExp = new RegExp(r'(\w+)((' + argsRegExp.pattern + r')+)');
     var splitRegExp = new RegExp(r'\r\n|\r|\n');
 
-    BitmapFontInfo info = null;
-    BitmapFontCommon common = null;
+    BitmapFontInfo info;
+    BitmapFontCommon common;
     List<BitmapFontPage> pages = new List<BitmapFontPage>();
     List<BitmapFontChar> chars = new List<BitmapFontChar>();
     List<BitmapFontKerning> kernings = new List<BitmapFontKerning>();
