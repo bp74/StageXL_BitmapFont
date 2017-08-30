@@ -11,12 +11,20 @@ part of stagexl_bitmapfont;
 class BitmapText extends Bitmap {
 
   final BitmapFont bitmapFont;
+
   String _text = "";
+  HorizontalAlign _hAlign = HorizontalAlign.Left;
+  num _origX = 0;
 
   BitmapText(this.bitmapFont) : super() {
     if (bitmapFont.pages.length > 1) {
       throw new ArgumentError("Use BitmapContainerText for multi page fonts.");
     }
+  }
+
+  void set x(num value) {
+    _origX = super.x = value;
+    _align();
   }
 
   //---------------------------------------------------------------------------
@@ -30,7 +38,21 @@ class BitmapText extends Bitmap {
     } else {
       var renderTextureQuad = this.bitmapFont.createRenderTextureQuad(text);
       this.bitmapData = new BitmapData.fromRenderTextureQuad(renderTextureQuad);
+
+      _align();
     }
   }
 
+  void _align() {
+    switch (_hAlign) {
+      case HorizontalAlign.Left:   super.x = _origX; break;
+      case HorizontalAlign.Center: super.x = _origX - width / 2; break;
+      case HorizontalAlign.Right:  super.x = _origX - width; break;
+    }
+  }
+
+  HorizontalAlign get horizontalAlign => _hAlign;
+  void set horizontalAlign(HorizontalAlign value) {
+    _hAlign = value;
+  }
 }
