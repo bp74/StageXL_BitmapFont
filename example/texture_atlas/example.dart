@@ -74,7 +74,7 @@ Future main() async {
 
 //-----------------------------------------------------------------------------
 
-Future animateBitmapText(BitmapContainerText bitmapText, Juggler juggler) async {
+void animateBitmapText(BitmapContainerText bitmapText, Juggler juggler) {
 
   for (var bitmap in bitmapText.children) {
     bitmap.pivotX = bitmap.width / 2;
@@ -83,9 +83,9 @@ Future animateBitmapText(BitmapContainerText bitmapText, Juggler juggler) async 
     bitmap.y += bitmap.pivotY;
   }
 
-  await for (var elapsedTime in juggler.onElapsedTimeChange) {
+  juggler.onElapsedTimeChange.listen((elapsedTime) {
     for (var bitmap in bitmapText.children) {
       bitmap.rotation = 0.2 * math.sin(elapsedTime * 8 + bitmap.x);
     }
-  }
+  });
 }

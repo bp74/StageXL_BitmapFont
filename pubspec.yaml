@@ -1,5 +1,5 @@
 name: stagexl_bitmapfont
-version: 0.3.1
+version: 0.4.0
 author: Bernhard Pichler <support@stagexl.org>
 description: BitmapFont support for StageXL.
 homepage: http://www.stagexl.org
@@ -10,8 +10,7 @@ environment:
 dependencies:
   xml: any
   browser: any
-  stagexl:
-    git: https://github.com/mnordine/StageXL
+  stagexl: '^1.3.0'
 
 transformers:
 - $dart2js:

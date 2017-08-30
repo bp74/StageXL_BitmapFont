@@ -11,7 +11,7 @@ class BitmapContainerText extends DisplayObjectContainer {
 
   String get text => _text;
 
-  void set text(String value) {
+  set text(String value) {
 
     this.removeChildren();
     _text = value;
