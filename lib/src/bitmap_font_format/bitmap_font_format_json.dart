@@ -10,7 +10,7 @@ class _BitmapFontFormatJson extends BitmapFontFormat {
     var source = await bitmapFontLoader.getSource();
     var pixelRatio = bitmapFontLoader.getPixelRatio();
 
-    var data = JSON.decode(source);
+    var data = json.decode(source);
     var infoPaddings = _getString(data, "padding", "0,0,0,0").split(",");
     var infoSpacings = _getString(data, "spacing", "0,0").split(",");
 
