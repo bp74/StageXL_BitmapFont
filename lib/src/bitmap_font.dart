@@ -26,7 +26,7 @@ class BitmapFont {
 
   static Future<BitmapFont> load(String url, [
       BitmapFontFormat bitmapFontFormat = BitmapFontFormat.FNT,
-      BitmapDataLoadOptions bitmapDataLoadOptions = null]) =>
+      BitmapDataLoadOptions bitmapDataLoadOptions]) =>
           bitmapFontFormat.load(new _BitmapFontLoaderFile(
               url, bitmapDataLoadOptions));
 

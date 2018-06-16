@@ -1,5 +1,7 @@
 The StageXL BitmapFont library is an extension to the StageXL library and 
-provides support for bitmap fonts.  
+provides support for bitmap fonts.
+
+*NOTE:* as of version 0.10.0-dev, `StageXL_BitmapFont` requires a Dart 2 SDK.  
 
 [![Build Status](https://travis-ci.org/bp74/StageXL_BitmapFont.svg?branch=master)](https://travis-ci.org/bp74/StageXL_BitmapFont)
 
