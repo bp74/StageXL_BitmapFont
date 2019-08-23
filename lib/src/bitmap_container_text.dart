@@ -21,14 +21,14 @@ class BitmapContainerText extends DisplayObjectContainer {
     var scale = 1.0 / this.bitmapFont.pixelRatio;
     var lastCodeUnit = 0;
 
-    var lineSplit = new RegExp(r"\r\n|\r|\n");
+    var lineSplit = RegExp(r"\r\n|\r|\n");
 
     for(String line in value.split(lineSplit)) {
       for(int codeUnit in line.codeUnits) {
         var bitmapFontChar = bitmapFont.getChar(codeUnit);
         if (bitmapFontChar != null) {
           x += scale * bitmapFont.getKerningAmount(lastCodeUnit, codeUnit);
-          var bitmap = new Bitmap(bitmapFontChar.bitmapData);
+          var bitmap = Bitmap(bitmapFontChar.bitmapData);
           bitmap.x = x;
           bitmap.y = y;
           bitmap.addTo(this);

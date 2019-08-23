@@ -20,8 +20,8 @@ Future main() async {
   // Init Stage and RenderLoop
 
   var canvas = html.querySelector('#stage');
-  var stage = new Stage(canvas, width: 1000, height: 400);
-  var renderLoop = new RenderLoop();
+  var stage = Stage(canvas, width: 1000, height: 400);
+  var renderLoop = RenderLoop();
   renderLoop.addStage(stage);
 
   // load BitmapFont
@@ -31,7 +31,7 @@ Future main() async {
 
   // create BitmapText and add it to the Stage
 
-  var bitmapText = new BitmapText(bitmapFont);
+  var bitmapText = BitmapText(bitmapFont);
   bitmapText.x = 500;
   bitmapText.y = 180;
   bitmapText.text = text;
@@ -40,20 +40,20 @@ Future main() async {
 
   // add the DistanceFieldFilter for sharp edges
 
-  var config1 = new DistanceFieldConfig(0.50, 0.25, Color.White);
-  var filter1 = new DistanceFieldFilter(config1);
+  var config1 = DistanceFieldConfig(0.50, 0.25, Color.White);
+  var filter1 = DistanceFieldFilter(config1);
 
-  var config2 = new DistanceFieldConfig(0.70, 0.20, Color.White);
-  var config3 = new DistanceFieldConfig(0.30, 0.20, Color.Black);
-  var filter2 = new DistanceFieldOutlineFilter(config2, config3);
+  var config2 = DistanceFieldConfig(0.70, 0.20, Color.White);
+  var config3 = DistanceFieldConfig(0.30, 0.20, Color.Black);
+  var filter2 = DistanceFieldOutlineFilter(config2, config3);
 
-  var config4 = new DistanceFieldConfig(0.70, 0.20, Color.White);
-  var config5 = new DistanceFieldConfig(0.10, 0.10, 0x80FF0000);
-  var filter3 = new DistanceFieldGlowFilter(config4, config5);
+  var config4 = DistanceFieldConfig(0.70, 0.20, Color.White);
+  var config5 = DistanceFieldConfig(0.10, 0.10, 0x80FF0000);
+  var filter3 = DistanceFieldGlowFilter(config4, config5);
 
-  var config6 = new DistanceFieldConfig(0.50, 0.20, Color.White);
-  var config7 = new DistanceFieldConfig(0.50, 0.50, Color.Black);
-  var filter4 = new DistanceFieldShadowFilter(config6, config7, 3, 3);
+  var config6 = DistanceFieldConfig(0.50, 0.20, Color.White);
+  var config7 = DistanceFieldConfig(0.50, 0.50, Color.Black);
+  var filter4 = DistanceFieldShadowFilter(config6, config7, 3, 3);
 
   var filters = [filter1, filter2, filter3, filter4];
   var filterIndex = 0;

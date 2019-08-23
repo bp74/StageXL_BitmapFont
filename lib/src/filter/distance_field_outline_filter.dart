@@ -16,14 +16,13 @@ class DistanceFieldOutlineFilter extends BitmapFilter {
   BitmapFilter clone() {
     var innerConfig = this.innerConfig.clone();
     var outerConfig = this.outerConfig.clone();
-    return new DistanceFieldOutlineFilter(innerConfig, outerConfig);
+    return DistanceFieldOutlineFilter(innerConfig, outerConfig);
   }
 
   //---------------------------------------------------------------------------
 
   @override
   void apply(BitmapData bitmapData, [Rectangle<num> rectangle]) {
-    // TODO: implement DistanceFieldOutlineFilter for BitmapDatas.
   }
 
   //---------------------------------------------------------------------------
@@ -38,7 +37,7 @@ class DistanceFieldOutlineFilter extends BitmapFilter {
 
     renderProgram = renderContext.getRenderProgram(
         r"$DistanceFieldOutlineFilterProgram",
-        () => new _DistanceFieldOutlineFilterProgram());
+        () => _DistanceFieldOutlineFilterProgram());
 
     renderContext.activateRenderProgram(renderProgram);
     renderContext.activateRenderTexture(renderTexture);

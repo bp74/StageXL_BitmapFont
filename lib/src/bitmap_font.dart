@@ -27,19 +27,19 @@ class BitmapFont {
   static Future<BitmapFont> load(String url, [
       BitmapFontFormat bitmapFontFormat = BitmapFontFormat.FNT,
       BitmapDataLoadOptions bitmapDataLoadOptions]) =>
-          bitmapFontFormat.load(new _BitmapFontLoaderFile(
+          bitmapFontFormat.load(_BitmapFontLoaderFile(
               url, bitmapDataLoadOptions));
 
   static Future<BitmapFont> fromTextureAtlas(
       TextureAtlas textureAtlas, String namePrefix, String source, [
       BitmapFontFormat bitmapFontFormat = BitmapFontFormat.FNT]) =>
-          bitmapFontFormat.load(new _BitmapFontLoaderTextureAtlas(
+          bitmapFontFormat.load(_BitmapFontLoaderTextureAtlas(
               textureAtlas, namePrefix, source));
 
   static Future<BitmapFont> fromBitmapData(
       BitmapData bitmapData, String source, [
       BitmapFontFormat bitmapFontFormat = BitmapFontFormat.FNT]) =>
-          bitmapFontFormat.load(new _BitmapFontLoaderBitmapData(
+          bitmapFontFormat.load(_BitmapFontLoaderBitmapData(
               bitmapData, source));
 
   static Future<BitmapFont> withLoader(
@@ -77,7 +77,7 @@ class BitmapFont {
   RenderTextureQuad createRenderTextureQuad(String text) {
 
     if (this.pages.length != 1) {
-      throw new StateError("Not supported for multi page bitmap fonts.");
+      throw StateError("Not supported for multi page bitmap fonts.");
     }
 
     var ixOffset = 0;
@@ -88,9 +88,9 @@ class BitmapFont {
     var x = 0.0;
     var y = 0.0;
 
-    var lineSplit = new RegExp(r"\r\n|\r|\n");
-    var vxData = new List<double>();
-    var ixData = new List<int>();
+    var lineSplit = RegExp(r"\r\n|\r|\n");
+    var vxData = List<double>();
+    var ixData = List<int>();
 
     for (String line in text.split(lineSplit)) {
 
@@ -127,11 +127,11 @@ class BitmapFont {
       y = y + scale * this.common.lineHeight;
     }
 
-    var bounds = new Rectangle<num>(0, 0, maxX, y);
+    var bounds = Rectangle<num>(0, 0, maxX, y);
     var renderTexture = this.pages[0].bitmapData.renderTexture;
     var renderTextureQuad = renderTexture.quad.cut(bounds);
-    var vxList = new Float32List.fromList(vxData);
-    var ixList = new Int16List.fromList(ixData);
+    var vxList = Float32List.fromList(vxData);
+    var ixList = Int16List.fromList(ixData);
     renderTextureQuad.setCustomVertices(vxList, ixList);
 
     return renderTextureQuad;

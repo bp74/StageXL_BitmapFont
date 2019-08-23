@@ -23,7 +23,7 @@ class DistanceFieldShadowFilter extends BitmapFilter {
   BitmapFilter clone() {
     var frontConfig = this.frontConfig.clone();
     var shadowConfig = this.shadowConfig.clone();
-    return new DistanceFieldShadowFilter(
+    return DistanceFieldShadowFilter(
         frontConfig, shadowConfig, this.offsetX, this.offsetY);
   }
 
@@ -31,7 +31,6 @@ class DistanceFieldShadowFilter extends BitmapFilter {
 
   @override
   void apply(BitmapData bitmapData, [Rectangle<num> rectangle]) {
-    // TODO: implement DistanceFieldFilter for BitmapDatas.
   }
 
   //---------------------------------------------------------------------------
@@ -46,7 +45,7 @@ class DistanceFieldShadowFilter extends BitmapFilter {
 
     renderProgram  = renderContext.getRenderProgram(
         r"$DistanceFieldFilterProgram",
-        () => new _DistanceFieldFilterProgram());
+        () => _DistanceFieldFilterProgram());
 
     renderContext.activateRenderProgram(renderProgram);
     renderContext.activateRenderTexture(renderTexture);

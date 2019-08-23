@@ -16,14 +16,13 @@ class DistanceFieldGlowFilter extends BitmapFilter {
   BitmapFilter clone() {
     var innerConfig = this.innerConfig.clone();
     var outerConfig = this.outerConfig.clone();
-    return new DistanceFieldGlowFilter(innerConfig, outerConfig);
+    return DistanceFieldGlowFilter(innerConfig, outerConfig);
   }
 
   //---------------------------------------------------------------------------
 
   @override
   void apply(BitmapData bitmapData, [Rectangle<num> rectangle]) {
-    // TODO: implement DistanceFieldGlowFilter for BitmapDatas.
   }
 
   //---------------------------------------------------------------------------
@@ -38,7 +37,7 @@ class DistanceFieldGlowFilter extends BitmapFilter {
 
     renderProgram = renderContext.getRenderProgram(
         r"$DistanceFieldGlowFilterProgram",
-        () => new _DistanceFieldGlowFilterProgram());
+        () => _DistanceFieldGlowFilterProgram());
 
     renderContext.activateRenderProgram(renderProgram);
     renderContext.activateRenderTexture(renderTexture);

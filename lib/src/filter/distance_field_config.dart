@@ -27,7 +27,7 @@ class DistanceFieldConfig {
       this.threshold = 0.5, this.softness = 0.25, this.color = Color.White]);
 
   DistanceFieldConfig clone() {
-    return new DistanceFieldConfig(this.threshold, this.softness, this.color);
+    return DistanceFieldConfig(this.threshold, this.softness, this.color);
   }
 
 }

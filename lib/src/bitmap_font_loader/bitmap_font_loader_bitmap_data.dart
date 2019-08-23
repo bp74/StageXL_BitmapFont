@@ -13,14 +13,14 @@ class _BitmapFontLoaderBitmapData extends BitmapFontLoader {
   double getPixelRatio() => this.bitmapData.renderTextureQuad.pixelRatio;
 
   @override
-  Future<String> getSource() => new Future.value(this.source);
+  Future<String> getSource() => Future.value(this.source);
 
   @override
   Future<BitmapData> getBitmapData(int id, String filename) {
     if (id == 0) {
-      return new Future.value(this.bitmapData);
+      return Future.value(this.bitmapData);
     } else {
-      throw new StateError("Only single BitmapData fonts are supported.");
+      throw StateError("Only single BitmapData fonts are supported.");
     }
   }
 }

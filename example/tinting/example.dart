@@ -25,8 +25,8 @@ Future main() async {
   // Init Stage and RenderLoop
 
   var canvas = html.querySelector('#stage');
-  var stage = new Stage(canvas, width: 1600, height: 700);
-  var renderLoop = new RenderLoop();
+  var stage = Stage(canvas, width: 1600, height: 700);
+  var renderLoop = RenderLoop();
   renderLoop.addStage(stage);
 
   // load BitmapFont
@@ -36,7 +36,7 @@ Future main() async {
 
   // create BitmapText and add it to the Stage
 
-  var bitmapText = new BitmapContainerText(bitmapFont);
+  var bitmapText = BitmapContainerText(bitmapFont);
   bitmapText.x = 50;
   bitmapText.y = 50;
   bitmapText.text = text;
@@ -52,11 +52,11 @@ Future main() async {
 
 void tintBitmapText(BitmapContainerText bitmapText) {
 
-  var random = new math.Random();
+  var random = math.Random();
 
   for (var bitmap in bitmapText.children) {
     var color = 0xFF000000 + random.nextInt(0xFFFFFF);
-    var filter = new TintFilter.fromColor(color);
+    var filter = TintFilter.fromColor(color);
     bitmap.filters = [filter];
   }
 }

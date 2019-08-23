@@ -14,13 +14,13 @@ class _BitmapFontLoaderTextureAtlas extends BitmapFontLoader {
   double getPixelRatio() => this.textureAtlas.pixelRatio;
 
   @override
-  Future<String> getSource() => new Future.value(this.source);
+  Future<String> getSource() => Future.value(this.source);
 
   @override
   Future<BitmapData> getBitmapData(int id, String filename) {
-    var regex = new RegExp(r"(.+?)(\.[^.]*$|$)");
+    var regex = RegExp(r"(.+?)(\.[^.]*$|$)");
     var match = regex.firstMatch(filename);
     var name = this.namePrefix + match.group(1);
-    return new Future.value(this.textureAtlas.getBitmapData(name));
+    return Future.value(this.textureAtlas.getBitmapData(name));
   }
 }

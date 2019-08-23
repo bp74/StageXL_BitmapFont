@@ -21,7 +21,7 @@ class _BitmapFontFormatXml extends BitmapFontFormat {
     var infoPaddings = _getString(infoXml, "padding", "0,0,0,0").split(",");
     var infoSpacings = _getString(infoXml, "spacing", "0,0").split(",");
 
-    var info = new BitmapFontInfo(
+    var info = BitmapFontInfo(
         _getString(infoXml, "face", ""),
         _getInt(infoXml, "size", 0),
         _getBool(infoXml, "bold", false),
@@ -39,7 +39,7 @@ class _BitmapFontFormatXml extends BitmapFontFormat {
         int.parse(infoSpacings[0]),
         int.parse(infoSpacings[1]));
 
-    var common = new BitmapFontCommon(
+    var common = BitmapFontCommon(
         _getInt(commonXml, "lineHeight", 0),
         _getInt(commonXml, "base", 0),
         _getInt(commonXml, "scaleW", 0),
@@ -55,7 +55,7 @@ class _BitmapFontFormatXml extends BitmapFontFormat {
       var id = _getInt(pageXml, "id", 0);
       var file = _getString(pageXml, "file", "");
       var bitmapData = await bitmapFontLoader.getBitmapData(id, file);
-      return new BitmapFontPage(id, bitmapData);
+      return BitmapFontPage(id, bitmapData);
     });
 
     var pages = await Future.wait(futurePages);
@@ -74,13 +74,13 @@ class _BitmapFontFormatXml extends BitmapFontFormat {
       var colorChannel = _getInt(charXml, "chnl", 0);
       var letter = _getString(charXml, "letter", "");
 
-      var renderTextureQuad = new RenderTextureQuad.slice(
+      var renderTextureQuad = RenderTextureQuad.slice(
           pages.firstWhere((p) => p.id == pageId).bitmapData.renderTextureQuad,
-          new Rectangle<int>(x, y, width, height),
-          new Rectangle<int>(-xOffset, -yOffset, width, common.lineHeight));
+          Rectangle<int>(x, y, width, height),
+          Rectangle<int>(-xOffset, -yOffset, width, common.lineHeight));
 
-      var bitmapData = new BitmapData.fromRenderTextureQuad(renderTextureQuad);
-      return new BitmapFontChar(id, bitmapData, advance, colorChannel, letter);
+      var bitmapData = BitmapData.fromRenderTextureQuad(renderTextureQuad);
+      return BitmapFontChar(id, bitmapData, advance, colorChannel, letter);
 
     }).toList();
 
@@ -88,10 +88,10 @@ class _BitmapFontFormatXml extends BitmapFontFormat {
       var first = _getInt(kerningXml, "first", -1);
       var second = _getInt(kerningXml, "second", -1);
       var amount = _getInt(kerningXml, "amount", 0);
-      return new BitmapFontKerning(first, second, amount);
+      return BitmapFontKerning(first, second, amount);
     }).toList();
 
-    return new BitmapFont(info, common, pages, chars, kernings, pixelRatio);
+    return BitmapFont(info, common, pages, chars, kernings, pixelRatio);
   }
 
   //---------------------------------------------------------------------------
@@ -118,6 +118,6 @@ class _BitmapFontFormatXml extends BitmapFontFormat {
     if (value == null) return defaultValue;
     if (value == "1") return true;
     if (value == "0") return false;
-    throw new FormatException("Error converting '$name' to bool.");
+    throw FormatException("Error converting '$name' to bool.");
   }
 }

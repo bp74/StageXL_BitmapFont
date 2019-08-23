@@ -14,7 +14,7 @@ class _BitmapFontFormatJson extends BitmapFontFormat {
     var infoPaddings = _getString(data, "padding", "0,0,0,0").split(",");
     var infoSpacings = _getString(data, "spacing", "0,0").split(",");
 
-    var info = new BitmapFontInfo(
+    var info = BitmapFontInfo(
         _getString(data, "face", ""),
         _getInt(data, "size", 0),
         _getBool(data, "bold", false),
@@ -32,7 +32,7 @@ class _BitmapFontFormatJson extends BitmapFontFormat {
         int.parse(infoSpacings[0]),
         int.parse(infoSpacings[1]));
 
-    var common = new BitmapFontCommon(
+    var common = BitmapFontCommon(
         _getInt(data, "lineHeight", 0),
         _getInt(data, "base", 0),
         _getInt(data, "scaleW", 0),
@@ -44,13 +44,13 @@ class _BitmapFontFormatJson extends BitmapFontFormat {
         _getInt(data, "greenChnl", 0),
         _getInt(data, "blueChnl", 0));
 
-    var pages = new List<BitmapFontPage>();
+    var pages = List<BitmapFontPage>();
     var file = _getString(data, "file", "");
     var bitmapData = await bitmapFontLoader.getBitmapData(0, file);
-    pages.add(new BitmapFontPage(0, bitmapData));
+    pages.add(BitmapFontPage(0, bitmapData));
 
     var charMaps = data["chars"];
-    if (charMaps == null) charMaps = new List();
+    if (charMaps == null) charMaps = List();
 
     var chars = charMaps.map((charMap) {
 
@@ -66,27 +66,27 @@ class _BitmapFontFormatJson extends BitmapFontFormat {
       var colorChannel = _getInt(charMap, "chnl", 0);
       var letter = _getString(charMap, "letter", "");
 
-      var renderTextureQuad = new RenderTextureQuad.slice(
+      var renderTextureQuad = RenderTextureQuad.slice(
           pages.firstWhere((p) => p.id == pageId).bitmapData.renderTextureQuad,
-          new Rectangle<int>(x, y, width, height),
-          new Rectangle<int>(-xOffset, -yOffset, width, common.lineHeight));
+          Rectangle<int>(x, y, width, height),
+          Rectangle<int>(-xOffset, -yOffset, width, common.lineHeight));
 
-      var bitmapData = new BitmapData.fromRenderTextureQuad(renderTextureQuad);
-      return new BitmapFontChar(id, bitmapData, advance, colorChannel, letter);
+      var bitmapData = BitmapData.fromRenderTextureQuad(renderTextureQuad);
+      return BitmapFontChar(id, bitmapData, advance, colorChannel, letter);
 
     }).toList();
 
     var kerningMaps = data["kernings"];
-    if (kerningMaps == null) kerningMaps = new List();
+    if (kerningMaps == null) kerningMaps = List();
 
     var kernings = kerningMaps.map((kerningMap) {
       var first = _getInt(kerningMap, "first", -1);
       var second = _getInt(kerningMap, "second", -1);
       var amount = _getInt(kerningMap, "amount", 0);
-      return new BitmapFontKerning(first, second, amount);
+      return BitmapFontKerning(first, second, amount);
     }).toList();
 
-    return new BitmapFont(info, common, pages, chars, kernings, pixelRatio);
+    return BitmapFont(info, common, pages, chars, kernings, pixelRatio);
   }
 
   //---------------------------------------------------------------------------

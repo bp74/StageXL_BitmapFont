@@ -4,9 +4,9 @@ part of stagexl_bitmapfont;
 
 abstract class BitmapFontFormat {
 
-  static const BitmapFontFormat FNT = const _BitmapFontFormatFnt();
-  static const BitmapFontFormat XML = const _BitmapFontFormatXml();
-  static const BitmapFontFormat JSON = const _BitmapFontFormatJson();
+  static const BitmapFontFormat FNT = _BitmapFontFormatFnt();
+  static const BitmapFontFormat XML = _BitmapFontFormatXml();
+  static const BitmapFontFormat JSON = _BitmapFontFormatJson();
 
   const BitmapFontFormat();
 

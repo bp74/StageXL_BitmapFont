@@ -10,15 +10,15 @@ class _BitmapFontFormatFnt extends BitmapFontFormat {
     var source = await bitmapFontLoader.getSource();
     var pixelRatio = bitmapFontLoader.getPixelRatio();
 
-    var argsRegExp = new RegExp(r'\s+(\w+)=((\-?\d+,?)+|".*?")');
-    var lineRegExp = new RegExp(r'(\w+)((' + argsRegExp.pattern + r')+)');
-    var splitRegExp = new RegExp(r'\r\n|\r|\n');
+    var argsRegExp = RegExp(r'\s+(\w+)=((\-?\d+,?)+|".*?")');
+    var lineRegExp = RegExp(r'(\w+)((' + argsRegExp.pattern + r')+)');
+    var splitRegExp = RegExp(r'\r\n|\r|\n');
 
     BitmapFontInfo info;
     BitmapFontCommon common;
-    List<BitmapFontPage> pages = new List<BitmapFontPage>();
-    List<BitmapFontChar> chars = new List<BitmapFontChar>();
-    List<BitmapFontKerning> kernings = new List<BitmapFontKerning>();
+    List<BitmapFontPage> pages = List<BitmapFontPage>();
+    List<BitmapFontChar> chars = List<BitmapFontChar>();
+    List<BitmapFontKerning> kernings = List<BitmapFontKerning>();
 
     for(var line in source.split(splitRegExp)) {
 
@@ -35,7 +35,7 @@ class _BitmapFontFormatFnt extends BitmapFontFormat {
         var paddings = _getIntList(argsMap, "padding", [0, 0, 0, 0]);
         var spacings = _getIntList(argsMap, "spacing", [0, 0]);
 
-        info = new BitmapFontInfo(
+        info = BitmapFontInfo(
           _getString(argsMap, "face", ""),
           _getInt(argsMap, "size", 0),
           _getBool(argsMap, "bold", false),
@@ -51,7 +51,7 @@ class _BitmapFontFormatFnt extends BitmapFontFormat {
 
       } else if (chunk == "common") {
 
-        common = new BitmapFontCommon(
+        common = BitmapFontCommon(
           _getInt(argsMap, "lineHeight", 0),
           _getInt(argsMap, "base", 0),
           _getInt(argsMap, "scaleW", 0),
@@ -68,7 +68,7 @@ class _BitmapFontFormatFnt extends BitmapFontFormat {
         var id = _getInt(argsMap, "id", 0);
         var file = _getString(argsMap, "file", "");
         var bitmapData = await bitmapFontLoader.getBitmapData(id, file);
-        pages.add(new BitmapFontPage(id, bitmapData));
+        pages.add(BitmapFontPage(id, bitmapData));
 
       } else if (chunk == "char") {
 
@@ -84,30 +84,30 @@ class _BitmapFontFormatFnt extends BitmapFontFormat {
         var colorChannel = _getInt(argsMap, "chnl", 0);
         var letter = _getString(argsMap, "letter", "");
 
-        var renderTextureQuad = new RenderTextureQuad.slice(
+        var renderTextureQuad = RenderTextureQuad.slice(
             pages.firstWhere((p) => p.id == pageId).bitmapData.renderTextureQuad,
-            new Rectangle<int>(x, y, width, height),
-            new Rectangle<int>(-xOffset, -yOffset, width, common.lineHeight));
+            Rectangle<int>(x, y, width, height),
+            Rectangle<int>(-xOffset, -yOffset, width, common.lineHeight));
 
-        var bitmapData = new BitmapData.fromRenderTextureQuad(renderTextureQuad);
-        chars.add(new BitmapFontChar(id, bitmapData, advance, colorChannel, letter));
+        var bitmapData = BitmapData.fromRenderTextureQuad(renderTextureQuad);
+        chars.add(BitmapFontChar(id, bitmapData, advance, colorChannel, letter));
 
       } else if (chunk == "kerning") {
 
         var first = _getInt(argsMap, "first", -1);
         var second = _getInt(argsMap, "second", -1);
         var amount = _getInt(argsMap, "amount", 0);
-        kernings.add(new BitmapFontKerning(first, second, amount));
+        kernings.add(BitmapFontKerning(first, second, amount));
       }
     }
 
-    return new BitmapFont(info, common, pages, chars, kernings, pixelRatio);
+    return BitmapFont(info, common, pages, chars, kernings, pixelRatio);
   }
 
   //---------------------------------------------------------------------------
 
   Map<String, String> _convertArgsMatches(Iterable<Match> matches) {
-    var map = new Map<String, String>();
+    var map = Map<String, String>();
     matches.forEach((match) {
       map[match.group(1)] = match.group(2);
     });
@@ -139,7 +139,7 @@ class _BitmapFontFormatFnt extends BitmapFontFormat {
     if (value == null) return defaultValue;
     if (value == "1") return true;
     if (value == "0") return false;
-    throw new FormatException("Error converting '$name' to bool.");
+    throw FormatException("Error converting '$name' to bool.");
   }
 
   List<int> _getIntList(Map map, String name, List<int> defaultValue) {

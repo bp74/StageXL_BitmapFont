@@ -28,13 +28,13 @@ Future main() async {
   // Init Stage and RenderLoop
 
   var canvas = html.querySelector('#stage');
-  var stage = new Stage(canvas, width: 1600, height: 800);
-  var renderLoop = new RenderLoop();
+  var stage = Stage(canvas, width: 1600, height: 800);
+  var renderLoop = RenderLoop();
   renderLoop.addStage(stage);
 
   // load TextureAtlas with glyphs and font files for later use
 
-  var resourceManager = new ResourceManager();
+  var resourceManager = ResourceManager();
   resourceManager.addTextureAtlas("atlas", "../common/images/font_atlas.json");
   resourceManager.addTextFile("fnt1", "../common/fonts/fnt/Luckiest_Guy.fnt");
   resourceManager.addTextFile("fnt2", "../common/fonts/fnt/Fascinate_Inline.fnt");
@@ -59,11 +59,11 @@ Future main() async {
 
   // Create a BitmapText for each line and use a different font
 
-  var lines = text.split(new RegExp(r"\r\n|\r|\n"));
+  var lines = text.split(RegExp(r"\r\n|\r|\n"));
 
   for (int i = 0; i < lines.length; i++) {
     var font = fonts[i % fonts.length];
-    var bitmapText = new BitmapContainerText(font);
+    var bitmapText = BitmapContainerText(font);
     bitmapText.x = 50;
     bitmapText.y = 50 + i * 64;
     bitmapText.text = lines[i];
