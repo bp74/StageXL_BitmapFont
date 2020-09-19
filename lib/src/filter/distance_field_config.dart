@@ -7,7 +7,6 @@ part of stagexl_bitmapfont;
 /// the pixel is right at the edge.
 
 class DistanceFieldConfig {
-
   /// The threshold of the edge within the distance field.
 
   num threshold;
@@ -23,11 +22,10 @@ class DistanceFieldConfig {
 
   //---------------------------------------------------------------------------
 
-  DistanceFieldConfig([
-      this.threshold = 0.5, this.softness = 0.25, this.color = Color.White]);
+  DistanceFieldConfig(
+      [this.threshold = 0.5, this.softness = 0.25, this.color = Color.White]);
 
   DistanceFieldConfig clone() {
-    return DistanceFieldConfig(this.threshold, this.softness, this.color);
+    return DistanceFieldConfig(threshold, softness, color);
   }
-
 }

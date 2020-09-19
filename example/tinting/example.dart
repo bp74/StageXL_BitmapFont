@@ -4,7 +4,7 @@ import 'dart:math' as math;
 import 'package:stagexl/stagexl.dart';
 import 'package:stagexl_bitmapfont/stagexl_bitmapfont.dart';
 
-String text = """
+String text = '''
 Lorem ipsum dolor sit amet, consetetur
 sadipscing elitr, sed diam nonumy eirmod
 tempor invidunt ut labore et dolore magna
@@ -12,10 +12,9 @@ aliquyam erat, sed diam voluptua. At vero
 eos et accusam et justo duo dolores et ea
 rebum. Stet clita kasd gubergren, no sea
 takimata sanctus est Lorem ipsum dolor
-sit amet.""";
+sit amet.''';
 
 Future main() async {
-
   // Configure StageXL default options
 
   StageXL.stageOptions.renderEngine = RenderEngine.WebGL;
@@ -31,7 +30,7 @@ Future main() async {
 
   // load BitmapFont
 
-  var fontUrl = "../common/fonts/fnt/Fascinate_Inline.fnt";
+  var fontUrl = '../common/fonts/fnt/Fascinate_Inline.fnt';
   var bitmapFont = await BitmapFont.load(fontUrl, BitmapFontFormat.FNT);
 
   // create BitmapText and add it to the Stage
@@ -51,7 +50,6 @@ Future main() async {
 //-----------------------------------------------------------------------------
 
 void tintBitmapText(BitmapContainerText bitmapText) {
-
   var random = math.Random();
 
   for (var bitmap in bitmapText.children) {
@@ -64,7 +62,6 @@ void tintBitmapText(BitmapContainerText bitmapText) {
 //-----------------------------------------------------------------------------
 
 void animateBitmapText(BitmapContainerText bitmapText, Juggler juggler) {
-
   for (var bitmap in bitmapText.children) {
     bitmap.pivotX = bitmap.width / 2;
     bitmap.pivotY = bitmap.height / 2;

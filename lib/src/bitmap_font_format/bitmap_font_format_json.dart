@@ -1,30 +1,28 @@
 part of stagexl_bitmapfont;
 
 class _BitmapFontFormatJson extends BitmapFontFormat {
-
   const _BitmapFontFormatJson();
 
   @override
   Future<BitmapFont> load(BitmapFontLoader bitmapFontLoader) async {
-
     var source = await bitmapFontLoader.getSource();
     var pixelRatio = bitmapFontLoader.getPixelRatio();
 
     var data = json.decode(source);
-    var infoPaddings = _getString(data, "padding", "0,0,0,0").split(",");
-    var infoSpacings = _getString(data, "spacing", "0,0").split(",");
+    var infoPaddings = _getString(data, 'padding', '0,0,0,0').split(',');
+    var infoSpacings = _getString(data, 'spacing', '0,0').split(',');
 
     var info = BitmapFontInfo(
-        _getString(data, "face", ""),
-        _getInt(data, "size", 0),
-        _getBool(data, "bold", false),
-        _getBool(data, "italic", false),
-        _getBool(data, "unicode", false),
-        _getBool(data, "smooth", false),
-        _getInt(data, "outline", 0),
-        _getInt(data, "stretchH", 100),
-        _getInt(data, "aa", 1),
-        _getString(data, "charset", ""),
+        _getString(data, 'face', ''),
+        _getInt(data, 'size', 0),
+        _getBool(data, 'bold', false),
+        _getBool(data, 'italic', false),
+        _getBool(data, 'unicode', false),
+        _getBool(data, 'smooth', false),
+        _getInt(data, 'outline', 0),
+        _getInt(data, 'stretchH', 100),
+        _getInt(data, 'aa', 1),
+        _getString(data, 'charset', ''),
         int.parse(infoPaddings[0]),
         int.parse(infoPaddings[1]),
         int.parse(infoPaddings[2]),
@@ -33,38 +31,37 @@ class _BitmapFontFormatJson extends BitmapFontFormat {
         int.parse(infoSpacings[1]));
 
     var common = BitmapFontCommon(
-        _getInt(data, "lineHeight", 0),
-        _getInt(data, "base", 0),
-        _getInt(data, "scaleW", 0),
-        _getInt(data, "scaleH", 0),
-        _getInt(data, "pages", 0),
-        _getBool(data, "packed", false),
-        _getInt(data, "alphaChnl", 0),
-        _getInt(data, "redChnl", 0),
-        _getInt(data, "greenChnl", 0),
-        _getInt(data, "blueChnl", 0));
+        _getInt(data, 'lineHeight', 0),
+        _getInt(data, 'base', 0),
+        _getInt(data, 'scaleW', 0),
+        _getInt(data, 'scaleH', 0),
+        _getInt(data, 'pages', 0),
+        _getBool(data, 'packed', false),
+        _getInt(data, 'alphaChnl', 0),
+        _getInt(data, 'redChnl', 0),
+        _getInt(data, 'greenChnl', 0),
+        _getInt(data, 'blueChnl', 0));
 
-    var pages = List<BitmapFontPage>();
-    var file = _getString(data, "file", "");
+    var pages = <BitmapFontPage>[];
+    var file = _getString(data, 'file', '');
     var bitmapData = await bitmapFontLoader.getBitmapData(0, file);
     pages.add(BitmapFontPage(0, bitmapData));
 
-    var charMaps = data["chars"];
-    if (charMaps == null) charMaps = List();
+    var charMaps = data['chars'];
+    charMaps ??= [];
 
     var chars = charMaps.map((charMap) {
-
-      var id = _getInt(charMap, "id", 0);
-      var x = _getInt(charMap, "x", 0);
-      var y = _getInt(charMap, "y", 0);
-      var width = _getInt(charMap, "width", 0);
-      var height = _getInt(charMap, "height", 0);
-      var xOffset = _getInt(charMap, "xoffset", 0);
-      var yOffset = _getInt(charMap, "yoffset", 0);
-      var advance = _getInt(charMap, "xadvance", 0);
-      var pageId = _getInt(charMap, "page", 0);
-      var colorChannel = _getInt(charMap, "chnl", 0);
-      var letter = _getString(charMap, "letter", "");
+      var id = _getInt(charMap, 'id', 0);
+      var x = _getInt(charMap, 'x', 0);
+      var y = _getInt(charMap, 'y', 0);
+      var width = _getInt(charMap, 'width', 0);
+      var height = _getInt(charMap, 'height', 0);
+      var xOffset = _getInt(charMap, 'xoffset', 0);
+      var yOffset = _getInt(charMap, 'yoffset', 0);
+      var advance = _getInt(charMap, 'xadvance', 0);
+      var pageId = _getInt(charMap, 'page', 0);
+      var colorChannel = _getInt(charMap, 'chnl', 0);
+      var letter = _getString(charMap, 'letter', '');
 
       var renderTextureQuad = RenderTextureQuad.slice(
           pages.firstWhere((p) => p.id == pageId).bitmapData.renderTextureQuad,
@@ -73,16 +70,15 @@ class _BitmapFontFormatJson extends BitmapFontFormat {
 
       var bitmapData = BitmapData.fromRenderTextureQuad(renderTextureQuad);
       return BitmapFontChar(id, bitmapData, advance, colorChannel, letter);
-
     }).toList();
 
-    var kerningMaps = data["kernings"];
-    if (kerningMaps == null) kerningMaps = List();
+    var kerningMaps = data['kernings'];
+    kerningMaps ??= [];
 
     var kernings = kerningMaps.map((kerningMap) {
-      var first = _getInt(kerningMap, "first", -1);
-      var second = _getInt(kerningMap, "second", -1);
-      var amount = _getInt(kerningMap, "amount", 0);
+      var first = _getInt(kerningMap, 'first', -1);
+      var second = _getInt(kerningMap, 'second', -1);
+      var amount = _getInt(kerningMap, 'amount', 0);
       return BitmapFontKerning(first, second, amount);
     }).toList();
 

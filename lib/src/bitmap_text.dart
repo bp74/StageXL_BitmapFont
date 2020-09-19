@@ -9,13 +9,12 @@ part of stagexl_bitmapfont;
 /// [BitmapContainerText] display object.
 
 class BitmapText extends Bitmap {
-
   final BitmapFont bitmapFont;
-  String _text = "";
+  String _text = '';
 
   BitmapText(this.bitmapFont) : super() {
     if (bitmapFont.pages.length > 1) {
-      throw ArgumentError("Use BitmapContainerText for multi page fonts.");
+      throw ArgumentError('Use BitmapContainerText for multi page fonts.');
     }
   }
 
@@ -25,12 +24,11 @@ class BitmapText extends Bitmap {
 
   set text(String value) {
     _text = value;
-    if (value == "") {
-      this.bitmapData = null;
+    if (value == '') {
+      bitmapData = null;
     } else {
-      var renderTextureQuad = this.bitmapFont.createRenderTextureQuad(text);
-      this.bitmapData = BitmapData.fromRenderTextureQuad(renderTextureQuad);
+      var renderTextureQuad = bitmapFont.createRenderTextureQuad(text);
+      bitmapData = BitmapData.fromRenderTextureQuad(renderTextureQuad);
     }
   }
-
 }

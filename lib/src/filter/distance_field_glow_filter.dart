@@ -1,7 +1,6 @@
 part of stagexl_bitmapfont;
 
 class DistanceFieldGlowFilter extends BitmapFilter {
-
   /// This configuration of the inner distance field;
   DistanceFieldConfig innerConfig;
 
@@ -22,21 +21,19 @@ class DistanceFieldGlowFilter extends BitmapFilter {
   //---------------------------------------------------------------------------
 
   @override
-  void apply(BitmapData bitmapData, [Rectangle<num> rectangle]) {
-  }
+  void apply(BitmapData bitmapData, [Rectangle<num> rectangle]) {}
 
   //---------------------------------------------------------------------------
 
   @override
   void renderFilter(
       RenderState renderState, RenderTextureQuad renderTextureQuad, int pass) {
-
     RenderContextWebGL renderContext = renderState.renderContext;
-    RenderTexture renderTexture = renderTextureQuad.renderTexture;
+    var renderTexture = renderTextureQuad.renderTexture;
     _DistanceFieldGlowFilterProgram renderProgram;
 
     renderProgram = renderContext.getRenderProgram(
-        r"$DistanceFieldGlowFilterProgram",
+        r'$DistanceFieldGlowFilterProgram',
         () => _DistanceFieldGlowFilterProgram());
 
     renderContext.activateRenderProgram(renderProgram);
@@ -50,7 +47,6 @@ class DistanceFieldGlowFilter extends BitmapFilter {
 //-----------------------------------------------------------------------------
 
 class _DistanceFieldGlowFilterProgram extends RenderProgram {
-
   // aPosition:   Float32(x), Float32(y)
   // aTexCoord:   Float32(u), Float32(v)
   // aInnerColor: Float32(r), Float32(g), Float32(b), Float32(a)
@@ -59,7 +55,7 @@ class _DistanceFieldGlowFilterProgram extends RenderProgram {
   //              Float32(outerThresholdMin), Float32(outerThresholdMax),
 
   @override
-  String get vertexShaderSource => """
+  String get vertexShaderSource => '''
 
     uniform mat4 uProjectionMatrix;
 
@@ -81,10 +77,10 @@ class _DistanceFieldGlowFilterProgram extends RenderProgram {
       vOuterColor = vec4(aOuterColor.rgb * aOuterColor.a, aOuterColor.a);
       gl_Position = vec4(aPosition, 0.0, 1.0) * uProjectionMatrix;
     }
-    """;
+    ''';
 
   @override
-  String get fragmentShaderSource => """
+  String get fragmentShaderSource => '''
 
     precision mediump float;
     uniform sampler2D uSampler;
@@ -104,22 +100,21 @@ class _DistanceFieldGlowFilterProgram extends RenderProgram {
       vec4 outerColor = vOuterColor * max(alpha.y - alpha.x, 0.0) * gradient;
       gl_FragColor = innerColor + outerColor;
     }
-    """;
+    ''';
 
   //---------------------------------------------------------------------------
 
   @override
   void activate(RenderContextWebGL renderContext) {
-
     super.activate(renderContext);
 
-    renderingContext.uniform1i(uniforms["uSampler"], 0);
+    renderingContext.uniform1i(uniforms['uSampler'], 0);
 
-    renderBufferVertex.bindAttribute(attributes["aPosition"],   2, 64, 0);
-    renderBufferVertex.bindAttribute(attributes["aTexCoord"],   2, 64, 8);
-    renderBufferVertex.bindAttribute(attributes["aInnerColor"], 4, 64, 16);
-    renderBufferVertex.bindAttribute(attributes["aOuterColor"], 4, 64, 32);
-    renderBufferVertex.bindAttribute(attributes["aThreshold"],  4, 64, 48);
+    renderBufferVertex.bindAttribute(attributes['aPosition'], 2, 64, 0);
+    renderBufferVertex.bindAttribute(attributes['aTexCoord'], 2, 64, 8);
+    renderBufferVertex.bindAttribute(attributes['aInnerColor'], 4, 64, 16);
+    renderBufferVertex.bindAttribute(attributes['aOuterColor'], 4, 64, 32);
+    renderBufferVertex.bindAttribute(attributes['aThreshold'], 4, 64, 48);
   }
 
   //---------------------------------------------------------------------------
@@ -128,7 +123,6 @@ class _DistanceFieldGlowFilterProgram extends RenderProgram {
       RenderState renderState,
       RenderTextureQuad renderTextureQuad,
       DistanceFieldGlowFilter distanceFieldGlowFilter) {
-
     var alpha = renderState.globalAlpha;
     var matrix = renderState.globalMatrix;
     var ixList = renderTextureQuad.ixList;
@@ -142,8 +136,8 @@ class _DistanceFieldGlowFilterProgram extends RenderProgram {
     var inner = distanceFieldGlowFilter.innerConfig;
     var innerColorA = ((inner.color >> 24) & 0xFF) / 255.0 * alpha;
     var innerColorR = ((inner.color >> 16) & 0xFF) / 255.0;
-    var innerColorG = ((inner.color >>  8) & 0xFF) / 255.0;
-    var innerColorB = ((inner.color >>  0) & 0xFF) / 255.0;
+    var innerColorG = ((inner.color >> 8) & 0xFF) / 255.0;
+    var innerColorB = ((inner.color >> 0) & 0xFF) / 255.0;
     var innerThresholdMin = inner.threshold - inner.softness / scale;
     var innerThresholdMax = inner.threshold + inner.softness / scale;
     if (innerThresholdMin < 0.0) innerThresholdMin = 0.0;
@@ -152,8 +146,8 @@ class _DistanceFieldGlowFilterProgram extends RenderProgram {
     var outer = distanceFieldGlowFilter.outerConfig;
     var outerColorA = ((outer.color >> 24) & 0xFF) / 255.0 * alpha;
     var outerColorR = ((outer.color >> 16) & 0xFF) / 255.0;
-    var outerColorG = ((outer.color >>  8) & 0xFF) / 255.0;
-    var outerColorB = ((outer.color >>  0) & 0xFF) / 255.0;
+    var outerColorG = ((outer.color >> 8) & 0xFF) / 255.0;
+    var outerColorB = ((outer.color >> 0) & 0xFF) / 255.0;
     var outerThresholdMin = outer.threshold - outer.softness / scale;
     var outerThresholdMax = outer.threshold + outer.softness / scale;
     if (outerThresholdMin < 0.0) outerThresholdMin = 0.0;
@@ -175,7 +169,7 @@ class _DistanceFieldGlowFilterProgram extends RenderProgram {
 
     // copy index list
 
-    for(var i = 0; i < indexCount; i++) {
+    for (var i = 0; i < indexCount; i++) {
       ixData[ixIndex + i] = vxCount + ixList[i];
     }
 
@@ -191,7 +185,7 @@ class _DistanceFieldGlowFilterProgram extends RenderProgram {
     var mx = matrix.tx;
     var my = matrix.ty;
 
-    for(var i = 0, o = 0; i < vertexCount; i++, o += 4) {
+    for (var i = 0, o = 0; i < vertexCount; i++, o += 4) {
       num x = vxList[o + 0];
       num y = vxList[o + 1];
       vxData[vxIndex + 00] = mx + ma * x + mc * y;
@@ -216,6 +210,4 @@ class _DistanceFieldGlowFilterProgram extends RenderProgram {
     renderBufferVertex.position += vertexCount * 16;
     renderBufferVertex.count += vertexCount;
   }
-
 }
-

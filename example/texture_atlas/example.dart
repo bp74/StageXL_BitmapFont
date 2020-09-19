@@ -4,7 +4,7 @@ import 'dart:math' as math;
 import 'package:stagexl/stagexl.dart';
 import 'package:stagexl_bitmapfont/stagexl_bitmapfont.dart';
 
-String text = """
+String text = '''
 Lorem ipsum dolor sit amet, consetetur 
 sadipscing elitr, sed diam nonumy eirmod 
 tempor invidunt ut labore et dolore magna 
@@ -15,10 +15,9 @@ takimata sanctus est Lorem ipsum dolor sit
 amet. Lorem ipsum dolor sit amet, consetetur 
 sadipscing elitr, sed diam nonumy eirmod 
 tempor invidunt ut labore et dolore magna 
-aliquyam erat, sed diam voluptua.""";
+aliquyam erat, sed diam voluptua.''';
 
 Future main() async {
-
   // Configure StageXL default options
 
   StageXL.stageOptions.renderEngine = RenderEngine.WebGL;
@@ -35,33 +34,34 @@ Future main() async {
   // load TextureAtlas with glyphs and font files for later use
 
   var resourceManager = ResourceManager();
-  resourceManager.addTextureAtlas("atlas", "../common/images/font_atlas.json");
-  resourceManager.addTextFile("fnt1", "../common/fonts/fnt/Luckiest_Guy.fnt");
-  resourceManager.addTextFile("fnt2", "../common/fonts/fnt/Fascinate_Inline.fnt");
-  resourceManager.addTextFile("fnt3", "../common/fonts/fnt/Sarina.fnt");
-  resourceManager.addTextFile("fnt4", "../common/fonts/fnt/Sigmar_One.fnt");
+  resourceManager.addTextureAtlas('atlas', '../common/images/font_atlas.json');
+  resourceManager.addTextFile('fnt1', '../common/fonts/fnt/Luckiest_Guy.fnt');
+  resourceManager.addTextFile(
+      'fnt2', '../common/fonts/fnt/Fascinate_Inline.fnt');
+  resourceManager.addTextFile('fnt3', '../common/fonts/fnt/Sarina.fnt');
+  resourceManager.addTextFile('fnt4', '../common/fonts/fnt/Sigmar_One.fnt');
   await resourceManager.load();
 
   // Create BitmapFonts with resources from the ResourceManager
 
-  var atlas = resourceManager.getTextureAtlas("atlas");
-  var source1 = resourceManager.getTextFile("fnt1");
-  var source2 = resourceManager.getTextFile("fnt2");
-  var source3 = resourceManager.getTextFile("fnt3");
-  var source4 = resourceManager.getTextFile("fnt4");
+  var atlas = resourceManager.getTextureAtlas('atlas');
+  var source1 = resourceManager.getTextFile('fnt1');
+  var source2 = resourceManager.getTextFile('fnt2');
+  var source3 = resourceManager.getTextFile('fnt3');
+  var source4 = resourceManager.getTextFile('fnt4');
 
   var fonts = await Future.wait([
-    BitmapFont.fromTextureAtlas(atlas, "", source1, BitmapFontFormat.FNT),
-    BitmapFont.fromTextureAtlas(atlas, "", source2, BitmapFontFormat.FNT),
-    BitmapFont.fromTextureAtlas(atlas, "", source3, BitmapFontFormat.FNT),
-    BitmapFont.fromTextureAtlas(atlas, "", source4, BitmapFontFormat.FNT)
+    BitmapFont.fromTextureAtlas(atlas, '', source1, BitmapFontFormat.FNT),
+    BitmapFont.fromTextureAtlas(atlas, '', source2, BitmapFontFormat.FNT),
+    BitmapFont.fromTextureAtlas(atlas, '', source3, BitmapFontFormat.FNT),
+    BitmapFont.fromTextureAtlas(atlas, '', source4, BitmapFontFormat.FNT)
   ]);
 
   // Create a BitmapText for each line and use a different font
 
-  var lines = text.split(RegExp(r"\r\n|\r|\n"));
+  var lines = text.split(RegExp(r'\r\n|\r|\n'));
 
-  for (int i = 0; i < lines.length; i++) {
+  for (var i = 0; i < lines.length; i++) {
     var font = fonts[i % fonts.length];
     var bitmapText = BitmapContainerText(font);
     bitmapText.x = 50;
@@ -75,7 +75,6 @@ Future main() async {
 //-----------------------------------------------------------------------------
 
 void animateBitmapText(BitmapContainerText bitmapText, Juggler juggler) {
-
   for (var bitmap in bitmapText.children) {
     bitmap.pivotX = bitmap.width / 2;
     bitmap.pivotY = bitmap.height / 2;

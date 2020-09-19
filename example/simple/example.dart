@@ -3,14 +3,13 @@ import 'dart:html' as html;
 import 'package:stagexl/stagexl.dart';
 import 'package:stagexl_bitmapfont/stagexl_bitmapfont.dart';
 
-String text = """
+String text = '''
 Hello World!
 Grumpy wizards make 
 toxic brew for the 
-evil Queen and Jack.""";
+evil Queen and Jack.''';
 
 Future main() async {
-
   // Configure StageXL default options
 
   StageXL.stageOptions.renderEngine = RenderEngine.WebGL;
@@ -26,7 +25,7 @@ Future main() async {
 
   // load BitmapFont
 
-  var fontUrl = "../common/fonts/fnt/Luckiest_Guy.fnt";
+  var fontUrl = '../common/fonts/fnt/Luckiest_Guy.fnt';
   //var fontUrl = "../common/fonts/fnt/Fascinate_Inline.fnt";
   //var fontUrl = "../common/fonts/fnt/Orbitron.fnt";
   //var fontUrl = "../common/fonts/fnt/Permanent_Marker.fnt";
@@ -42,6 +41,4 @@ Future main() async {
   bitmapText.y = 50;
   bitmapText.text = text;
   bitmapText.addTo(stage);
-
 }
-

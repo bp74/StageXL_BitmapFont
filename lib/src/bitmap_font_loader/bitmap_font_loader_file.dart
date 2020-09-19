@@ -1,7 +1,6 @@
 part of stagexl_bitmapfont;
 
 class _BitmapFontLoaderFile extends BitmapFontLoader {
-
   BitmapDataLoadOptions _loadOptions;
   BitmapDataLoadInfo _loadInfo;
 
@@ -22,8 +21,9 @@ class _BitmapFontLoaderFile extends BitmapFontLoader {
   Future<BitmapData> getBitmapData(int id, String filename) async {
     var loaderUrl = _loadInfo.loaderUrl;
     var pixelRatio = _loadInfo.pixelRatio;
-    var regex = RegExp(r"^(.*/)?(?:$|(.+?)(?:(\.[^.]*$)|$))");
+    var regex = RegExp(r'^(.*/)?(?:$|(.+?)(?:(\.[^.]*$)|$))');
     var path = regex.firstMatch(loaderUrl).group(1);
+    // ignore: prefer_single_quotes
     var imageUrl = path == null ? filename : "$path$filename";
     var bitmap = await BitmapData.load(imageUrl, _loadOptions);
     var renderTextureQuad = bitmap.renderTextureQuad.withPixelRatio(pixelRatio);

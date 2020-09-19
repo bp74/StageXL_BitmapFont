@@ -1,7 +1,6 @@
 part of stagexl_bitmapfont;
 
 class BitmapFont {
-
   /// Information on how the font was generated.
   final BitmapFontInfo info;
 
@@ -20,46 +19,43 @@ class BitmapFont {
 
   final double pixelRatio;
 
-  BitmapFont(this.info, this.common, this.pages, this.chars, this.kernings, this.pixelRatio);
+  BitmapFont(this.info, this.common, this.pages, this.chars, this.kernings,
+      this.pixelRatio);
 
   //---------------------------------------------------------------------------
 
-  static Future<BitmapFont> load(String url, [
-      BitmapFontFormat bitmapFontFormat = BitmapFontFormat.FNT,
-      BitmapDataLoadOptions bitmapDataLoadOptions]) =>
-          bitmapFontFormat.load(_BitmapFontLoaderFile(
-              url, bitmapDataLoadOptions));
+  static Future<BitmapFont> load(String url,
+          [BitmapFontFormat bitmapFontFormat = BitmapFontFormat.FNT,
+          BitmapDataLoadOptions bitmapDataLoadOptions]) =>
+      bitmapFontFormat.load(_BitmapFontLoaderFile(url, bitmapDataLoadOptions));
 
   static Future<BitmapFont> fromTextureAtlas(
-      TextureAtlas textureAtlas, String namePrefix, String source, [
-      BitmapFontFormat bitmapFontFormat = BitmapFontFormat.FNT]) =>
-          bitmapFontFormat.load(_BitmapFontLoaderTextureAtlas(
-              textureAtlas, namePrefix, source));
+          TextureAtlas textureAtlas, String namePrefix, String source,
+          [BitmapFontFormat bitmapFontFormat = BitmapFontFormat.FNT]) =>
+      bitmapFontFormat.load(
+          _BitmapFontLoaderTextureAtlas(textureAtlas, namePrefix, source));
 
-  static Future<BitmapFont> fromBitmapData(
-      BitmapData bitmapData, String source, [
-      BitmapFontFormat bitmapFontFormat = BitmapFontFormat.FNT]) =>
-          bitmapFontFormat.load(_BitmapFontLoaderBitmapData(
-              bitmapData, source));
+  static Future<BitmapFont> fromBitmapData(BitmapData bitmapData, String source,
+          [BitmapFontFormat bitmapFontFormat = BitmapFontFormat.FNT]) =>
+      bitmapFontFormat.load(_BitmapFontLoaderBitmapData(bitmapData, source));
 
-  static Future<BitmapFont> withLoader(
-      BitmapFontLoader bitmapFontLoader, [
-      BitmapFontFormat bitmapFontFormat = BitmapFontFormat.FNT]) =>
-          bitmapFontFormat.load(bitmapFontLoader);
+  static Future<BitmapFont> withLoader(BitmapFontLoader bitmapFontLoader,
+          [BitmapFontFormat bitmapFontFormat = BitmapFontFormat.FNT]) =>
+      bitmapFontFormat.load(bitmapFontLoader);
 
   //---------------------------------------------------------------------------
 
   BitmapFontChar getChar(int id) {
-    for(int i = 0; i < this.chars.length; i++) {
-      var char = this.chars[i];
+    for (var i = 0; i < chars.length; i++) {
+      var char = chars[i];
       if (char.id == id) return char;
     }
     return null;
   }
 
   BitmapFontKerning getKerning(int first, int second) {
-    for(int i = 0; i < this.kernings.length; i++) {
-      var kerning = this.kernings[i];
+    for (var i = 0; i < kernings.length; i++) {
+      var kerning = kernings[i];
       if (kerning.first == first && kerning.second == second) {
         return kerning;
       }
@@ -75,41 +71,38 @@ class BitmapFont {
   //---------------------------------------------------------------------------
 
   RenderTextureQuad createRenderTextureQuad(String text) {
-
-    if (this.pages.length != 1) {
-      throw StateError("Not supported for multi page bitmap fonts.");
+    if (pages.length != 1) {
+      throw StateError('Not supported for multi page bitmap fonts.');
     }
 
     var ixOffset = 0;
     var lastCodeUnit = 0;
 
-    var scale = 1.0 / this.pixelRatio;
+    var scale = 1.0 / pixelRatio;
     var maxX = 0.0;
     var x = 0.0;
     var y = 0.0;
 
-    var lineSplit = RegExp(r"\r\n|\r|\n");
-    var vxData = List<double>();
-    var ixData = List<int>();
+    var lineSplit = RegExp(r'\r\n|\r|\n');
+    var vxData = <double>[];
+    var ixData = <int>[];
 
-    for (String line in text.split(lineSplit)) {
+    for (var line in text.split(lineSplit)) {
+      for (var codeUnit in line.codeUnits) {
+        x += scale * getKerningAmount(lastCodeUnit, codeUnit);
 
-      for (int codeUnit in line.codeUnits) {
-
-        x += scale * this.getKerningAmount(lastCodeUnit, codeUnit);
-
-        var bitmapFontChar = this.getChar(codeUnit);
+        var bitmapFontChar = getChar(codeUnit);
         if (bitmapFontChar == null) continue;
 
         var charQuad = bitmapFontChar.bitmapData.renderTextureQuad;
         var charVxList = charQuad.vxList;
         var charIxList = charQuad.ixList;
 
-        for (int i = 0; i < charIxList.length; i++) {
+        for (var i = 0; i < charIxList.length; i++) {
           ixData.add(ixOffset + charIxList[i]);
         }
 
-        for (int i = 0; i <= charVxList.length - 4; i += 4) {
+        for (var i = 0; i <= charVxList.length - 4; i += 4) {
           vxData.add(charVxList[i + 0] + x);
           vxData.add(charVxList[i + 1] + y);
           vxData.add(charVxList[i + 2]);
@@ -124,11 +117,11 @@ class BitmapFont {
       maxX = x > maxX ? x : maxX;
       lastCodeUnit = 0;
       x = 0.0;
-      y = y + scale * this.common.lineHeight;
+      y = y + scale * common.lineHeight;
     }
 
     var bounds = Rectangle<num>(0, 0, maxX, y);
-    var renderTexture = this.pages[0].bitmapData.renderTexture;
+    var renderTexture = pages[0].bitmapData.renderTexture;
     var renderTextureQuad = renderTexture.quad.cut(bounds);
     var vxList = Float32List.fromList(vxData);
     var ixList = Int16List.fromList(ixData);

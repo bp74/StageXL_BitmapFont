@@ -1,7 +1,6 @@
 part of stagexl_bitmapfont;
 
 class DistanceFieldFilter extends BitmapFilter {
-
   /// This configuration of the distance field;
   DistanceFieldConfig config;
 
@@ -18,27 +17,24 @@ class DistanceFieldFilter extends BitmapFilter {
   //---------------------------------------------------------------------------
 
   @override
-  void apply(BitmapData bitmapData, [Rectangle<num> rectangle]) {
-  }
+  void apply(BitmapData bitmapData, [Rectangle<num> rectangle]) {}
 
   //---------------------------------------------------------------------------
 
   @override
   void renderFilter(
       RenderState renderState, RenderTextureQuad renderTextureQuad, int pass) {
-
     RenderContextWebGL renderContext = renderState.renderContext;
-    RenderTexture renderTexture = renderTextureQuad.renderTexture;
+    var renderTexture = renderTextureQuad.renderTexture;
     _DistanceFieldFilterProgram renderProgram;
 
-    renderProgram  = renderContext.getRenderProgram(
-        r"$DistanceFieldFilterProgram",
-        () => _DistanceFieldFilterProgram());
+    renderProgram = renderContext.getRenderProgram(
+        r'$DistanceFieldFilterProgram', () => _DistanceFieldFilterProgram());
 
     renderContext.activateRenderProgram(renderProgram);
     renderContext.activateRenderTexture(renderTexture);
     renderProgram.renderDistanceFieldFilterQuad(
-        renderState, renderTextureQuad, this.config);
+        renderState, renderTextureQuad, config);
   }
 }
 
@@ -46,14 +42,13 @@ class DistanceFieldFilter extends BitmapFilter {
 //-----------------------------------------------------------------------------
 
 class _DistanceFieldFilterProgram extends RenderProgram {
-
   // aPosition:   Float32(x), Float32(y)
   // aTexCoord:   Float32(u), Float32(v)
   // aInnerColor: Float32(r), Float32(g), Float32(b), Float32(a)
   // aThreshold:  Float32(thresholdMin), Float32(thresholdMax)
 
   @override
-  String get vertexShaderSource => """
+  String get vertexShaderSource => '''
 
     uniform mat4 uProjectionMatrix;
 
@@ -72,10 +67,10 @@ class _DistanceFieldFilterProgram extends RenderProgram {
       vInnerColor = vec4(aInnerColor.rgb * aInnerColor.a, aInnerColor.a);
       gl_Position = vec4(aPosition, 0.0, 1.0) * uProjectionMatrix;
     }
-    """;
+    ''';
 
   @override
-  String get fragmentShaderSource => """
+  String get fragmentShaderSource => '''
 
     precision mediump float;
     uniform sampler2D uSampler;
@@ -89,21 +84,20 @@ class _DistanceFieldFilterProgram extends RenderProgram {
       float alpha = smoothstep(vThreshold.x, vThreshold.y, distance);
       gl_FragColor = vInnerColor * alpha;
     }
-    """;
+    ''';
 
   //---------------------------------------------------------------------------
 
   @override
   void activate(RenderContextWebGL renderContext) {
-
     super.activate(renderContext);
 
-    renderingContext.uniform1i(uniforms["uSampler"], 0);
+    renderingContext.uniform1i(uniforms['uSampler'], 0);
 
-    renderBufferVertex.bindAttribute(attributes["aPosition"],   2, 40, 0);
-    renderBufferVertex.bindAttribute(attributes["aTexCoord"],   2, 40, 8);
-    renderBufferVertex.bindAttribute(attributes["aInnerColor"], 4, 40, 16);
-    renderBufferVertex.bindAttribute(attributes["aThreshold"],  2, 40, 32);
+    renderBufferVertex.bindAttribute(attributes['aPosition'], 2, 40, 0);
+    renderBufferVertex.bindAttribute(attributes['aTexCoord'], 2, 40, 8);
+    renderBufferVertex.bindAttribute(attributes['aInnerColor'], 4, 40, 16);
+    renderBufferVertex.bindAttribute(attributes['aThreshold'], 2, 40, 32);
   }
 
   //---------------------------------------------------------------------------
@@ -112,7 +106,6 @@ class _DistanceFieldFilterProgram extends RenderProgram {
       RenderState renderState,
       RenderTextureQuad renderTextureQuad,
       DistanceFieldConfig distanceFieldConfig) {
-
     var alpha = renderState.globalAlpha;
     var matrix = renderState.globalMatrix;
     var ixList = renderTextureQuad.ixList;
@@ -126,8 +119,8 @@ class _DistanceFieldFilterProgram extends RenderProgram {
     var config = distanceFieldConfig;
     var colorA = ((config.color >> 24) & 0xFF) / 255.0 * alpha;
     var colorR = ((config.color >> 16) & 0xFF) / 255.0;
-    var colorG = ((config.color >>  8) & 0xFF) / 255.0;
-    var colorB = ((config.color >>  0) & 0xFF) / 255.0;
+    var colorG = ((config.color >> 8) & 0xFF) / 255.0;
+    var colorB = ((config.color >> 0) & 0xFF) / 255.0;
     var thresholdMin = config.threshold - config.softness / scale;
     var thresholdMax = config.threshold + config.softness / scale;
     if (thresholdMin < 0.0) thresholdMin = 0.0;
@@ -149,7 +142,7 @@ class _DistanceFieldFilterProgram extends RenderProgram {
 
     // copy index list
 
-    for(var i = 0; i < indexCount; i++) {
+    for (var i = 0; i < indexCount; i++) {
       ixData[ixIndex + i] = vxCount + ixList[i];
     }
 
@@ -165,7 +158,7 @@ class _DistanceFieldFilterProgram extends RenderProgram {
     var mx = matrix.tx;
     var my = matrix.ty;
 
-    for(var i = 0, o = 0; i < vertexCount; i++, o += 4) {
+    for (var i = 0, o = 0; i < vertexCount; i++, o += 4) {
       num x = vxList[o + 0];
       num y = vxList[o + 1];
       vxData[vxIndex + 00] = mx + ma * x + mc * y;
@@ -184,5 +177,4 @@ class _DistanceFieldFilterProgram extends RenderProgram {
     renderBufferVertex.position += vertexCount * 10;
     renderBufferVertex.count += vertexCount;
   }
-
 }
